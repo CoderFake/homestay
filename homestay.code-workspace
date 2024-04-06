@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "homestay",
+			"path": "."
+		},
+		{
+			"name": "DashUI-1.0.0",
+			"path": "../DashUI-1.0.0"
+		},
+		{
+			"path": "../../Library/Mobile Documents/com~apple~CloudDocs/Documents/HoangDieu/Documents/PL"
+		},
+		{
+			"path": "../mutiple-file-project-main"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "mutiple-file-project-main"
+	}
+}
