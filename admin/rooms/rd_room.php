@@ -667,12 +667,14 @@ $userdata = User();
                         dataType: 'json',
                         data: { room_ids: JSON.stringify(roomIds) }, // Giả định rằng roomIds là một mảng
                         success: function (response) {
-                            // Xử lý khi request thành công
-                            console.log(response);
                             closeload();
+                            if(response.status){
+                                createToast(response.status, response.message);
+                            }
                         },
                         error: function (xhr, status, error) {
                             closeload();
+                            createToast("error", "Đã có lỗi xảy ra!");
                         }
                     });
                 }

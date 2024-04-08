@@ -826,19 +826,21 @@ $userdata = User();
                         url: '/admin/ajax/up_room.php', // Thay đổi đường dẫn tới file xử lý của bạn
                         type: 'POST',
                         data: formData,
-                        contentType: false, // cần thiết khi gửi đối tượng FormData
-                        processData: false, // cần thiết khi gửi đối tượng FormData
+                        contentType: false, 
+                        processData: false, 
                         success: function (response) {
-                            // Xử lý khi request thành công
-                            console.log(response);
+                            closeload();
                             var result = JSON.parse(response);
-                            $('.notice').text(result.message);
-                            $("#roomSelect option:selected").val(get_room_url()).trigger('change');
-                            $('#crudform .list li').remove();
+                            if(result.status){
+                                createToast(result.status, result.message);
+                            }
+                            setTimeout(function() {
+                                $("#roomSelect option:selected").val(get_room_url()).trigger('change');
+                            }, 3000);
+
                         },
                         error: function (xhr, status, error) {
-                            // Xử lý khi có lỗi
-                            console.error(error);
+                            createToast("error", "Đã có lỗi xảy ra, vui lòng tải lại trang!");
                         }
                     });
                 }

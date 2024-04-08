@@ -13,9 +13,12 @@
 		},
 		{
 			"path": "../mutiple-file-project-main"
+		},
+		{
+			"path": "../pluto-1.0.0"
 		}
 	],
 	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "mutiple-file-project-main"
+		"liveServer.settings.multiRootWorkspaceName": "homestay"
 	}
 }

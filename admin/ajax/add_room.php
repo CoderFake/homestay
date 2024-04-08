@@ -64,9 +64,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         updateRoomImagesInDatabase($room_id);
     }
 
-    echo json_encode(['status' => 'success', 'message' => 'success:Phòng đã được tạo thành công và thư mục đã được tạo.'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo json_encode(['status' => 'success', 'message' => 'Phòng đã được tạo thành công và thư mục đã được tạo.'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 } else {
-    echo json_encode(['status' => 'error', 'message' => 'error:Phương thức không được hỗ trợ'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo json_encode(['status' => 'error', 'message' => 'Phương thức không được hỗ trợ'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
 ?>

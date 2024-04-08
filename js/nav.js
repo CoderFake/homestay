@@ -73,4 +73,49 @@ $(document).ready(function() {
         }
     });
 });
+function createToast(type, message) {
+    const toastDetails = {
+        success: {
+            icon: 'fa-circle-check',
+            color: 'green',
+        },
+        error: {
+            icon: 'fa-circle-xmark',
+            color: 'red',
+        }
+    };
 
+    const detail = toastDetails[type];
+    const tst = $('<li>').addClass(`tst ${type}`).html(`
+        <div class="column" style="color: ${detail.color};">
+            <i class="fa-solid ${detail.icon}"></i>
+            <span>${message}</span>
+       </div>
+       <i class="fa-solid fa-xmark"></i>`);
+
+    $(".notifications").append(tst);
+    tst.find('.fa-xmark').click(function() { $(this).parent().remove(); });
+    setTimeout(() => tst.remove(), 5000);
+}
+function load() {
+    $('#Overlay').empty();
+    $('#Overlay').fadeIn();
+    $('#Overlay').append(`
+        <div class="load">
+            <hr/><hr/><hr/><hr/>
+        </div>
+    `)
+}
+
+function closeload() {
+    setTimeout(function () {
+        $('#Overlay').empty();
+        $('#Overlay').fadeOut();
+        $('#Overlay').append(`
+            <div id="overlayContent"></div>
+            <button type="button" class="close" id ="closeOverlay" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+            </button>
+        `)
+    }, 1000);
+}

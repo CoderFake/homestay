@@ -9,7 +9,8 @@ if (isset($_POST['room_ids'])) {
     $roomIds = json_decode($_POST['room_ids'], true);
 
     if (!is_array($roomIds)) {
-        exit('Invalid input');
+        echo json_encode(['status' => 'error', 'message' => 'Homestay không tồn tại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit();
     }
 
     $roomIds = filteration($roomIds);
@@ -20,7 +21,7 @@ if (isset($_POST['room_ids'])) {
         $sql = "UPDATE rooms SET removed = 1 WHERE room_id = ?";
         $stmt = $con->prepare($sql);
         if (!$stmt) {
-            continue; // Skip to the next room_id
+            continue; 
         }
         $stmt->bind_param('i', $id);
         $stmt->execute();
@@ -42,9 +43,8 @@ if (isset($_POST['room_ids'])) {
         }
         resetAutoIncrement($table);
     }
-
-    // Xóa thư mục ảnh của các phòng
     deleteMultipleRoomDirectories($roomIds);
+    echo json_encode(['status' => 'success', 'message' => 'Xoá phòng thành công!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 
 ?>

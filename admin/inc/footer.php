@@ -4,7 +4,6 @@
 </section>
 
 <ul class="notifications"></ul>
-<div class="notice"></div>
 <!-- Overlay Element -->
 <div id="Overlay" style="display:none;">
   <!-- Nơi swiper-container mới sẽ được thêm vào -->

@@ -49,6 +49,23 @@ function adminLogin(){
 //Điều này giúp tăng cường bảo mật cho phiên làm việc của người dùng, do đó, tăng khả năng chống lại các cuộc tấn công từ người dùng xấu.
 }
 
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+ 
+function setupMailer() {
+    $mail = new PHPMailer(true); // Tạo đối tượng PHPMailer và bật exception
+    $mail->isSMTP();                                      // Sử dụng SMTP
+    $mail->Host       = 'smtp.gmail.com';               // Máy chủ SMTP
+    $mail->SMTPAuth   = true;                             // Kích hoạt xác thực SMTP
+    $mail->Username   = 'noreply.email.homestay@gmail.com';// SMTP username
+    $mail->Password   = 'ilpoeziakxdlxcbk';                // SMTP password
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;                       // Kích hoạt mã hóa TLS
+    $mail->Port       = 465;                              // Cổng kết nối
+    $mail->setFrom('noreply.email.homestay@gmail.com','No-reply');
+    return $mail;
+}
+
+
 
 
 
@@ -165,22 +182,22 @@ function uploadImageAndReturnPath($imageField) {
     if($check !== false) {
         // Kiểm tra kích thước file (2MB)
         if ($_FILES[$imageField]["size"] > 2000000) {
-            echo "<div class='notice'>error:Ảnh vượt kích thước 2M!</div>";
+            echo json_encode(['status' => 'error', 'message' => "CẢnh vượt kích thước 2M!"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             $uploadOk = 0;
         }
         // Kiểm tra định dạng file
         if(!in_array($imageFileType, ['jpg', 'png', 'jpeg', 'webp'])) {
-            echo "<div class='notice'>error:Chỉ cho phép files: JPG, JPEG, PNG & WEBP!</div>";
+            echo json_encode(['status' => 'error', 'message' => "Chỉ cho phép files: JPG, JPEG, PNG & WEBP!"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             $uploadOk = 0;
         }
     } else {
-        echo "<div class='notice'>error:File ảnh không đúng định dạng!</div>";
+        echo json_encode(['status' => 'error', 'message' => "File ảnh không đúng định dạng!"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         $uploadOk = 0;
     }
 
     // Kiểm tra nếu $uploadOk được đặt thành 0 do lỗi
     if ($uploadOk == 0) {
-        echo "<div class='notice'>error:Lỗi khi tải ảnh lên!</div>";
+        echo json_encode(['status' => 'error', 'message' => "Lỗi khi tải ảnh lên!"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         return null;
     // Nếu tất cả các kiểm tra đều ổn, thử upload file
     } else {

@@ -490,12 +490,14 @@ $userdata = User();
               $("input[type='checkbox']").prop('checked', false);
             }
             closeload();
+            if(response.status){
+                createToast(response.status, response.message);
+            }
 
           },
           error: function (xhr, status, error) {
-            // Xử lý khi có lỗi
-            console.error(error);
             closeload();
+            createToast("error", "Đã có lỗi xảy ra, vui lòng tải lại trang!");
           }
         });
       });

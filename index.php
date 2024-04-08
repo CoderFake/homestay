@@ -298,10 +298,13 @@ $rooms = getRoomDetails();
                     data: $(this).serialize(),
                     dataType: 'json',
                     success: function(response) {
-                        $('#formResponse').html(`<div class="notice">${response.message}</div>`);
+                        if(response.status === "success")
+                            createToast('success', response.message);
+                        else 
+                        createToast('error', response.message);
                     },
                     error: function() {
-                        $('#formResponse').html('<div class="notice">error:Gửi tin nhắn thất bại!');
+                        createToast('error', response.message);
                     }
                 });
                     

@@ -28,21 +28,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['name'], $_POST['email'
 
         // Thực thi câu lệnh
         if ($stmt->execute()) {
-            echo json_encode(['status' => 'success', 'message' => 'success:Gửi tin nhắn thành công!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            echo json_encode(['status' => 'success', 'message' => 'Gửi tin nhắn thành công!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         } else {
-            echo json_encode(['status' => 'error', 'message' => 'error:Gửi tin nhắn thất bại!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            echo json_encode(['status' => 'error', 'message' => 'Gửi tin nhắn thất bại!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         }
 
         // Đóng câu lệnh
         $stmt->close();
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'error:Lỗi chuẩn bị truy vấn cơ sở dữ liệu!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        echo json_encode(['status' => 'error', 'message' => 'Lỗi chuẩn bị truy vấn cơ sở dữ liệu!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 
     // Đóng kết nối cơ sở dữ liệu
     $con->close();
 } else {
     // Nếu không phải là yêu cầu POST hoặc thiếu dữ liệu
-    echo json_encode(['status' => 'error', 'message' => 'error:Dữ liệu không hợp lệ hoặc thiếu!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    echo json_encode(['status' => 'error', 'message' => 'Dữ liệu không hợp lệ hoặc thiếu!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 }
 ?>

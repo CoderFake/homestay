@@ -172,6 +172,45 @@
             </ul>
           </li>
 
+          
+          <li class="sidebar-nav-item">
+            <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#navTables" aria-expanded="false" aria-controls="navTables">
+              <span class="sidebar-nav-icon">
+                <i data-feather="user"></i>
+              </span>
+              <span class="sidebar-nav-name">
+                Quản lý tài khoản 
+              </span>
+              <span class="sidebar-nav-end">
+                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
+              </span>
+            </a>
+
+            <ul class="sidebar-sub-nav collapse" id="navTables">
+              <li class="sidebar-nav-item">
+                <a href="/admin/users/users.php" class="sidebar-nav-link">
+                  <span class="sidebar-nav-abbr">
+                    Ur
+                  </span>
+                  <span class="sidebar-nav-name">
+                    Quản lý tài khoản
+                  </span>
+                </a>
+              </li>
+
+              <li class="sidebar-nav-item">
+                <a href="/admin/users/inf_users.php" class="sidebar-nav-link">
+                  <span class="sidebar-nav-abbr">
+                    If
+                  </span>
+                  <span class="sidebar-nav-name">
+                    Thông tin tài khoản
+                  </span>
+                </a>
+              </li>
+            </ul>
+          </li>
+
           <li class="sidebar-nav-item">
             <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#example" aria-expanded="false" aria-controls="example">
               <span class="sidebar-nav-icon">
@@ -204,44 +243,6 @@
                   </span>
                   <span class="sidebar-nav-name">
                     Morris
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </li>
-
-          <li class="sidebar-nav-item">
-            <a class="sidebar-nav-link collapsed" data-toggle="collapse" href="#navTables" aria-expanded="false" aria-controls="navTables">
-              <span class="sidebar-nav-icon">
-                <i data-feather="user"></i>
-              </span>
-              <span class="sidebar-nav-name">
-                Quản lý tài khoản 
-              </span>
-              <span class="sidebar-nav-end">
-                <i data-feather="chevron-right" class="nav-collapse-icon"></i>
-              </span>
-            </a>
-
-            <ul class="sidebar-sub-nav collapse" id="navTables">
-              <li class="sidebar-nav-item">
-                <a href="./layouts/tables.html" class="sidebar-nav-link">
-                  <span class="sidebar-nav-abbr">
-                    Re
-                  </span>
-                  <span class="sidebar-nav-name">
-                    Regular Tables
-                  </span>
-                </a>
-              </li>
-
-              <li class="sidebar-nav-item">
-                <a href="./layouts/tables_data.html" class="sidebar-nav-link">
-                  <span class="sidebar-nav-abbr">
-                    Da
-                  </span>
-                  <span class="sidebar-nav-name">
-                    Data Tables
                   </span>
                 </a>
               </li>

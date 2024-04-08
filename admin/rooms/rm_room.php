@@ -568,7 +568,6 @@ $userdata = User();
                 event.preventDefault(); // Ngăn chặn hành động mặc định của form submit
 
                 var roomIds = [get_room_url()]; // Nếu roomSelect là một multi-select
-                console.log(roomIds);
 
                 if (roomIds) {
                     load();
@@ -578,12 +577,13 @@ $userdata = User();
                         dataType: 'json',
                         data: { room_ids: JSON.stringify(roomIds)}, // Giả định rằng roomIds là một mảng
                         success: function (response) {
-                            // Xử lý khi request thành công
-                            console.log(response);
                             closeload();
+                            if(response.status)
+                                createToast(response.status, response.message);
                         },
                         error: function (xhr, status, error) {
                             closeload();
+                            createToast("error", "Đã có lỗi xảy ra, vui lòng tải lại trang!");
                         }
                     });
                 }

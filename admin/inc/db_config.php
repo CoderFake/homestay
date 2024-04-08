@@ -28,31 +28,28 @@ function filteration($data) {
 }
 
 //câu lệnh hthi tất cả dữ liệu trong 1 bảng ra khỏi db
-function select($sql,$values,$datatypes)
-{
+function select($sql, $values, $datatypes) {
     $con = $GLOBALS['con'];
-    if($stmt = mysqli_prepare($con,$sql))//kiểm tra có truy vấn sql k
-    {
-        mysqli_stmt_bind_param($stmt,$datatypes,...$values);
-        //liên kết các giá trị đầu vào với các tham số trong câu lệnh truy vấn
-        if(mysqli_stmt_execute($stmt)){
-            //thực thi câu lệnh truy vấn với các giá trị được cung cấp.
+    if ($stmt = mysqli_prepare($con, $sql)) {
+        // Chỉ gọi mysqli_stmt_bind_param() nếu có giá trị đầu vào
+        if (!empty($values)) {
+            mysqli_stmt_bind_param($stmt, $datatypes, ...$values);
+        }
+        if (mysqli_stmt_execute($stmt)) {
             $res = mysqli_stmt_get_result($stmt);
-            //nếu thành công  lấy kết quả truy vấn và trả về nó
-            mysqli_stmt_close($stmt);//đóng kết nối tới db
-            return $res;//giá trị trả về cuối cùng 
+            mysqli_stmt_close($stmt);
+            return $res;
+        } else {
+            mysqli_stmt_close($stmt);
+            echo json_encode(['status' => 'error', 'message' => 'Lấy thông tin thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            exit();
         }
-        else{//nếu không thành công sẽ đóng kết nối và tb lỗi
-            mysqli_stmt_close($stmt);//đóng kết nối tới db
-            echo json_encode(['status' => 'error', 'message' => 'error:lấy thông tin phòng thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
-            exit();//hien thong bao loi
-        }
-    }
-    else{
-        echo json_encode(['status' => 'error', 'message' => 'error:lấy thông tin phòng thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Lấy thông tin thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
         exit();
     }
 }
+
 //câu lệnh update dữ liệu sd cho hàm edit các dữ liệu của room, user
 function update($sql,$values,$datatypes){
     $con = $GLOBALS['con'];
@@ -67,11 +64,13 @@ function update($sql,$values,$datatypes){
         }
         else{//k thành công thì đóng kết nối và báo lỗi
             mysqli_stmt_close($stmt);
-            die("Query cannot be excuted - update");
+            echo json_encode(['status' => 'error', 'message' => 'Cập nhật thông tin thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            exit;
         }
     }
     else{
-        die("Query cannot be prepared - update");
+        echo json_encode(['status' => 'error', 'message' => 'Cập nhật thông tin thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit;
     }
 }
 //câu lệnh thực hiện việc thêm dữ liệu vào db
@@ -134,6 +133,22 @@ function delete($sql, $values, $datatypes){
     }
 }
 
+function selectOrderedUsers() {
+    $con = $GLOBALS['con'];
+    $sql = "SELECT user_id, name, email, phone_number, is_verified, role 
+            FROM `users` 
+            WHERE `removed`=0
+            ORDER BY FIELD(role, 'admin', 'staff', 'customer')";
+
+    if ($result = mysqli_query($con, $sql)) {
+        $users = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        mysqli_free_result($result);
+        return $users;
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Lấy thông tin thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return [];
+    }
+}
 function getUsersLoggedIn() {
     $con = $GLOBALS['con'];
     $sql = "SELECT COUNT(*) as count FROM `users` WHERE `status` = TRUE";

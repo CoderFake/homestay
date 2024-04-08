@@ -12,7 +12,7 @@ $queryTotalRooms = "SELECT SUM(quantity) AS total_rooms FROM room_status";
 $resultTotalRooms = $con->query($queryTotalRooms);
 $totalRooms = $resultTotalRooms->fetch_assoc()['total_rooms'];
 $queryBookedRooms = "SELECT SUM(quantity) AS booked_rooms FROM room_status WHERE status='Đã đặt'";
-$resultBookedRooms = $con->query($queryBookedRooms); // Sử dụng $con thay vì $conn
+$resultBookedRooms = $con->query($queryBookedRooms); 
 $bookedRooms = $resultBookedRooms->fetch_assoc()['booked_rooms'];
 $percentage = $totalRooms > 0 ? ($bookedRooms / $totalRooms) * 100 : 0;
 
@@ -311,33 +311,6 @@ $userdata = User();
   <?php require ("inc/footer.php") ?>
   <script>
     $(document).ready(function () {
-      loadLocations('district', 'R1903516');
-      $('#district').on('change', function () {
-        loadLocations('ward', $(this).val());
-        $('#road').val('');
-      });
-      $('#ward').on('change', function () {
-        $('#road').val('');
-      });
-      function loadLocations(type, parentId) {
-        $.ajax({
-          url: '/admin/ajax/api.php',
-          type: 'GET',
-          data: { type: type, parentId: parentId },
-          success: function (data) {
-            var locations = JSON.parse(data);
-            var name = "";
-            if (type == 'district') name = "quận huyện";
-            else name = "phường xã";
-            $('#' + type).empty().append(new Option(`Chọn ${name}`, ""));
-            locations.forEach(function (location) {
-              $('#' + type).append(new Option(location.displayName, location.id));
-            });
-          }
-        });
-      }
-    });
-    $(document).ready(function () {
       function fetchUsersLoggedIn() {
         $.ajax({
           url: 'ajax/users.php', // Đảm bảo đường dẫn đúng
@@ -346,7 +319,6 @@ $userdata = User();
           dataType: 'json',
           success: function (response) {
             $('.count-signin').text(response.count); // Cập nhật số người dùng
-            console.log('Số người dùng đang đăng nhập: ' + response.count);
           },
           error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown); // Ghi lỗi ra console nếu có
