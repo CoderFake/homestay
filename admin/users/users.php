@@ -12,8 +12,6 @@ $userdata = User();
 
 <head>
   <?php require ("../inc/links.php") ?>
-  <link rel="stylesheet" type="text/css" href="/admin/dist/css/admin.css" media="screen" />
-</head>
 
 <body>
   <div class="adminx-container">
@@ -32,7 +30,27 @@ $userdata = User();
           </nav>
 
           <div class="pb-3">
-            <h1>Quản lý người dùng</h1>
+            <div class="row">
+              <div class="col-lg-7" style="height:50px;">
+                <div class="text-center text-md-left">
+                  <h2>Quản lý người dùng</h2>
+                </div>
+              </div>
+              <div class="col-lg-5">
+                <?php if (isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true): ?>
+                  <div class="form-group d-flex justify-content-end align-items-center">
+                    <select class="btn btn-sm btn-primary user-btn-edit-control hid" id="btnEditUser"
+                      style="height:42px;">
+                      <option value="" selected>Thay đổi quyền</option>
+                      <option value="admin">admin</option>
+                      <option value="staff">nhân viên</option>
+                      <option value="customer">khách hàng</option>
+                    </select>
+                    <button type="submit" id="btnDelUser" class="btn btn-danger ml-2 hid">Xoá users đã chọn</button>
+                  </div>
+                <?php endif; ?>
+              </div>
+            </div>
           </div>
           <div class="row">
             <div class="col">
@@ -61,7 +79,7 @@ $userdata = User();
                         <tr>
                           <?php if (isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true): ?>
                             <td>
-                              <?php if($user['user_id']!= 3){ ?>
+                              <?php if ($user['user_id'] != 3) { ?>
                                 <label class="custom-control custom-checkbox m-0 p-0">
                                   <input type="checkbox" class="checkbox custom-control-input table-select-row"
                                     id="user_<?php echo htmlspecialchars($user['user_id']); ?>">
@@ -82,45 +100,29 @@ $userdata = User();
                           <td>
                             <?php echo htmlspecialchars($user['phone_number']); ?>
                           </td>
-                          <td>       
-                            <?php if($user['role']== "admin"){ ?>
+                          <td>
+                            <?php if ($user['role'] == "admin") { ?>
                               <span class="badge badge-pill badge-primary">admin</span>
-                            <?php }
-                            else if($user['role']== "staff"){?>
-                              <span class="badge badge-pill badge-warning">nhân viên</span>
-                            <?php }
-                            else {?>
-                              <span class="badge badge-pill badge-info">khách hàng</span>
-                              <?php if($user['is_verified']== 1){ ?>
-                                <span class="badge badge-pill badge-success">đã xác thực</span>
+                            <?php } else if ($user['role'] == "staff") { ?>
+                                <span class="badge badge-pill badge-warning">nhân viên</span>
+                            <?php } else { ?>
+                                <span class="badge badge-pill badge-info">khách hàng</span>
+                              <?php if ($user['is_verified'] == 1) { ?>
+                                  <span class="badge badge-pill badge-success">đã xác thực</span>
+                              <?php } else { ?>
+                                  <span class="badge badge-pill badge-danger">chưa xác thực</span>
                               <?php }
-                              else{ ?>
-                                <span class="badge badge-pill badge-danger">chưa xác thực</span>
-                              <?php } 
-                            }?>
-                             
+                              } ?>
+
                             </span>
                           </td>
                           <td>
                             <input class="input-view-control d-none"
                               value="<?php echo htmlspecialchars($user['user_id']); ?>" />
-                            <?php if (isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true){ ?>
-                              <button class="btn btn-sm btn-warning user-btn-view-control">Xem</button>
-                              <?php if($user['user_id']!= 3){ ?>
-                                <button class="btn btn-sm btn-primary user-btn-edit-control">Sửa</button>
-                                <button class="btn btn-sm btn-danger user-btn-del-control">Xoá</button>
-                            <?php }else if($_SESSION['admin_id'] == $user['user_id']){ ?>   
-                                  <?php if($user['user_id']== 3){ ?>
-                                      <button class="btn btn-sm btn-primary user-btn-edit-control">Sửa</button>
-                                    <?php }
-                                    else {?>
-                                    <button class="btn btn-sm btn-primary user-btn-edit-control">Sửa</button>
-                                    <button class="btn btn-sm btn-danger user-btn-del-control">Xoá</button>
-                                    <?php }?>
-                            <?php } }
-                              else if( $user['role'] == "customer" || $_SESSION['staff_id'] == $user['user_id']){ ?>
-                                  <button class="btn btn-sm btn-info user-btn-view-control">Xem</button>
-                            <?php }?>
+                            <?php if ((isset($_SESSION['staff_id']) && $_SESSION['staff_id'] == $user['user_id']) || (isset($_SESSION['admin_id']) && $_SESSION['admin_id'] == $user['user_id'])) { ?>
+                              <button class="btn btn-sm btn-primary user-btn-edit-control">Sửa</button>
+                            <?php } ?>
+                            <button class="btn btn-sm btn-info user-btn-view-control">Xem</button>
                           </td>
                         </tr>
                       <?php endforeach; ?>
@@ -141,6 +143,79 @@ $userdata = User();
     <!-- // Main Content -->
   </div>
   <?php require_once ("../inc/footer.php") ?>
+  <script>
+    $(document).ready(function () {
+
+      // Xử lý sự kiện khi thay đổi quyền
+      $("#btnEditUser").change(function () {
+        var role = $(this).val(); // Lấy quyền được
+        var selectedUsers = [];
+        $(".table-select-row:checked").each(function () {
+          // Lấy giá trị của thẻ input 'input-select-control' tương ứng
+          var userId = $(this).closest("td").find(".input-select-control").val();
+
+          // Thêm giá trị vào mảng
+          selectedUsers.push(userId);
+        });
+
+        console.log(role);
+        console.log(selectedUsers);
+        // Gửi AJAX request để cập nhật quyền
+        if (role) {
+          load();
+          $.ajax({
+            url: "/admin/ajax/users.php", // Đường dẫn đến script xử lý
+            type: "POST",
+            data: {
+              action: "update_role",
+              userIds: selectedUsers,
+              role: role
+            },
+            dataType: 'json',
+            success: function (response) {
+              closeload();
+              console.log(response);
+              createToast(response.status, response.message);
+              setTimeout(function() {
+                window.location.href = '/admin/users/users.php';
+              }, 4000);
+            }
+          });
+        }
+      });
+
+      // Xử lý sự kiện khi nhấn nút Xoá người dùng đã chọn
+      $("#btnDelUser").click(function () {
+        var selectedUsers = [];
+        $(".table-select-row:checked").each(function () {
+          // Lấy giá trị của thẻ input 'input-select-control' tương ứng
+          var userId = $(this).closest("td").find(".input-select-control").val();
+
+          // Thêm giá trị vào mảng
+          selectedUsers.push(userId);
+        });
+
+        load();
+        $.ajax({
+          url: "/admin/ajax/users.php", // Đường dẫn đến script xử lý
+          type: "POST",
+          data: {
+            action: "delete_users",
+            userIds: selectedUsers
+          },
+          dataType: 'json',
+          success: function (response) {
+            closeload();
+            console.log(response);
+            createToast(response.status, response.message);
+            setTimeout(function () {
+              window.location.href = '/admin/users/users.php';
+            }, 4000);
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

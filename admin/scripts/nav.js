@@ -56,9 +56,14 @@ $(document).ready(function () {
         if (anyChecked) {
             // Hiển thị nút nếu có checkbox được chọn
             $('#btnDel').removeClass('hid');
+            $('#btnDelUser').removeClass('hid');
+            $('#btnEditUser').removeClass('hid');
+
         } else {
             // Ẩn nút nếu không có checkbox nào được chọn
             $('#btnDel').addClass('hid');
+            $('#btnDelUser').addClass('hid');
+            $('#btnEditUser').addClass('hid');
         }
     });
     $('.btn-view-control').on('click', function () {
@@ -209,11 +214,6 @@ $(document).ready(function () {
             outputId: 'child_rangeV',
             formControlId: 'child_input'
         },
-        {
-            inputId: 'time_day2_range',
-            outputId: 'time_day2_rangeV',
-            formControlId: 'time_day2_input'
-        }
     ];
 
     function formatValue(value, formControlId) {

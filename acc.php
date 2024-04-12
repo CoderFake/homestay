@@ -86,6 +86,10 @@ function loginUser($postData)
             $_SESSION['user_id'] = $user_data['user_id'];
             $_SESSION['user_name'] = $user_data['name'];
             $_SESSION['login'] = true;
+            if (isset($_SESSION['user_reset_id'])){
+                unset($_SESSION['user_reset_id']);
+                unset($_SESSION['user_reset']);
+            }
             $sql = "UPDATE `users` SET `status` = 1 WHERE `user_id` = ?";
             if ($stmt = mysqli_prepare($con, $sql)) {
                 mysqli_stmt_bind_param($stmt, "i", $user_data['user_id']);
@@ -186,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <input type="hidden" name="action" value="login">
                 <input type="email" placeholder="Email" name="email" />
                 <input type="password" placeholder="Password" name="password" />
-                <a href="#">Bạn quên mật khẩu?</a>
+                <a href="resetpwd.php">Bạn quên mật khẩu?</a>
                 <button type="submit">Đăng nhập</button>
             </form>
         </div>

@@ -161,6 +161,8 @@ function getUsersLoggedIn() {
     
 }
 
+//=========================Rooms==============================================
+
 function renumberImages($room_id, $imageNames) {
     if (!empty($imageNames)) {
         $uploadDir = __DIR__ . '/../images/rooms/' . $room_id . '/';
@@ -289,7 +291,7 @@ function uploadRoomImages($room_id) {
                 exit();
             }
         } else {
-            echo json_encode(['status' => 'error', 'message' => "Ảnh không hợp lệ hoặc kích thước lớn hơn 2MB"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            echo json_encode(['status' => 'error', 'message' => "Ảnh không hợp lệ hoặc kích thước lớn hơn 2MB!S"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             exit();
         }
     }
@@ -321,6 +323,97 @@ function deleteMultipleRoomDirectories($roomIds) {
         }
     }
 }
+ 
+
+//=========================Users==============================================
+
+// Hàm cập nhật quyền người dùng
+function updateRole() {
+    $con = $GLOBALS['con']; 
+    if (isset($_POST['userIds'], $_POST['role']) && !empty($_POST['userIds']) && !empty($_POST['role'])) {
+        // Lọc và kiểm tra dữ liệu đầu vào cho vai trò
+        $role = filteration($_POST['role']);
+
+        // Lọc mảng ID người dùng
+        $userIds = array_map('filteration', $_POST['userIds']);
+        
+        // Kiểm tra sau khi lọc
+        if (empty($role) || empty($userIds)) {
+            echo json_encode(['status' => 'error', 'message' => 'Dữ liệu không hợp lệ sau khi lọc']);
+            return;
+        }
+
+        // Tạo chuỗi placeholder cho phần IN của câu lệnh SQL dựa trên số lượng ID người dùng
+        $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+
+        // Định nghĩa các kiểu cho tất cả tham số, bắt đầu với 's' cho vai trò
+        $types = 's' . str_repeat('i', count($userIds));  // 's' cho chuỗi (role), tiếp theo là 'i' cho số nguyên (user IDs)
+
+        // Câu lệnh SQL để cập nhật vai trò nếu user_id nằm trong danh sách các placeholder
+        $sql = "UPDATE `users` SET `role` = ? WHERE `user_id` IN ($placeholders)";
+
+        // Chuẩn bị câu lệnh SQL
+        $stmt = mysqli_prepare($con, $sql);
+        if ($stmt) {
+            // Gắn các tham số với việc gắn tham số động sử dụng toán tử spread cho các ID người dùng
+            mysqli_stmt_bind_param($stmt, $types, $role, ...$userIds);
+
+            // Thực thi câu lệnh đã chuẩn bị
+            if (mysqli_stmt_execute($stmt)) {
+                echo json_encode(['status' => 'success', 'message' => 'Quyền người dùng đã được cập nhật'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            } else {
+                echo json_encode(['status' => 'error', 'message' => 'Cập nhật quyền thất bại'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            }
+            mysqli_stmt_close($stmt);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Cập nhật quyền thất bại'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+    }else {
+        echo json_encode(['status' => 'error', 'message' => 'Dữ liệu không hợp lệ'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+}
+
+
+
+// Hàm xóa người dùng
+function deleteUsers() {
+    $con = $GLOBALS['con']; 
+    if (isset($_POST['userIds']) && !empty($_POST['userIds'])) {
+        $userIds = $_POST['userIds'];
+
+        // Kiểm tra email sunhim2k3@gmail.com không được xóa
+        $emailQuery = "SELECT `user_id` FROM `users` WHERE `email` = 'sunhim2k3@gmail.com'";
+        $emailResult = mysqli_query($con, $emailQuery);
+        if ($emailResult && mysqli_num_rows($emailResult) > 0) {
+            $emailRow = mysqli_fetch_assoc($emailResult);
+            $protectedUserId = $emailRow['user_id'];
+
+            // Nếu ID của người dùng này nằm trong mảng ID được yêu cầu xóa, trả về lỗi
+            if (in_array($protectedUserId, $userIds)) {
+                echo json_encode(['status' => 'error', 'message' => 'Người dùng với email sunhim2k3@gmail.com không thể bị xóa!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                return;
+            }
+        }
+
+        // Xử lý mảng userID để tránh SQL Injection
+        $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+        $types = str_repeat('i', count($userIds));
+        $sql = "UPDATE `users` SET `removed` = 1 WHERE `user_id` IN ($placeholders)";
+
+        // Chuẩn bị và thực thi câu truy vấn
+        $stmt = mysqli_prepare($con, $sql);
+        mysqli_stmt_bind_param($stmt, $types, ...$userIds);
+        if (mysqli_stmt_execute($stmt)) {
+            echo json_encode(['status' => 'success', 'message' => 'Người dùng đã được xóa!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        } else {
+            echo json_encode(['status' => 'error', 'message' => 'Xóa người dùng thất bại!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+        mysqli_stmt_close($stmt);
+    } else {
+        echo json_encode(['status' => 'error', 'message' => 'Dữ liệu không hợp lệ!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+    }
+}
+
 
 
 ?>

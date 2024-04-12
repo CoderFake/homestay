@@ -16,13 +16,18 @@ if (isset($_POST['token'])) {
         $resultUpdate = update($activateUserQuery, [$token], 's');
   
         if ($resultUpdate > 0) {
-            // Nếu kích hoạt thành công, xoá token và hết hạn
+            header('Content-Type: application/json');
             echo json_encode(['status' => 'success', 'message' => 'Tài khoản đã được kích hoạt thành công!'], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            exit();
         } else {
+            header('Content-Type: application/json');
             echo json_encode(['status' => 'error', 'message' => 'Có lỗi xảy ra, không thể kích hoạt tài khoản!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            exit();
         }
     } else {
+        header('Content-Type: application/json');
         echo json_encode(['status' => 'error', 'message' => 'Token không hợp lệ hoặc đã hết hạn!'],  JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        exit();
     }
   }
 ?>

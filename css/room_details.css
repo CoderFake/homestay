@@ -1,0 +1,51 @@
+.container{
+    margin-top: 100px;
+}
+.star > div {
+    margin-right: 5px; 
+}
+
+
+.star > div {
+    display: flex;
+    align-items: center;
+    text-align: end;
+}
+
+
+.star > div:last-child {
+    margin-right: 0;
+}
+
+.star img {
+    width: 25px;
+    display: block;
+    height: auto;
+}
+.room-images{
+    overflow:hidden;
+    border-radius:20px;
+}
+
+.swiper-button-next,
+.swiper-button-prev {
+    width: 40px;
+    height: 40px;
+    background-color: var(--bg);
+    border-radius: 20%;
+}
+
+@media screen and (max-width: 768px) {
+    h1{
+        text-align: center;
+    }
+    .star{
+        margin-top: 40px;
+        position: relative;
+    }
+    .star .ms-2{
+        position:absolute;
+        top: -25px;
+        left: 0;
+    }
+}

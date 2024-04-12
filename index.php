@@ -128,16 +128,16 @@ $rooms = getRoomDetails();
                     <div class="container">
                         <h1 class="heading">home<span>stay</span></h1>
                         <?php
-                            // Sử dụng hàm selectAll() để lấy tất cả các phòng
-                            $sql = "SELECT * FROM rooms WHERE removed = ?";
-                            $values = array(0);
-                            $datatypes = 'i';
-                            $rooms = select($sql, $values, $datatypes);
-                            $defaultThumb = "/images/" . $data_homestay['logo_image'];
-                            $count = 0; // Biến đếm để kiểm soát việc xuất hàng mới sau mỗi 4 phòng
+                        // Sử dụng hàm selectAll() để lấy tất cả các phòng
+                        $sql = "SELECT * FROM rooms WHERE removed = ?";
+                        $values = array(0);
+                        $datatypes = 'i';
+                        $rooms = select($sql, $values, $datatypes);
+                        $defaultThumb = "/images/" . $data_homestay['logo_image'];
+                        $count = 0; // Biến đếm để kiểm soát việc xuất hàng mới sau mỗi 4 phòng
                         ?>
                         <div class="row d-none d-sm-flex">
-                        <?php
+                            <?php
                             foreach ($rooms as $room_data) {
                                 $thumbData = select("SELECT image_url FROM room_images WHERE room_id = ? AND is_thumbnail = 1 LIMIT 1", [$room_data['room_id']], 'i');
                                 $room_thumb = $defaultThumb;
@@ -148,33 +148,33 @@ $rooms = getRoomDetails();
                                 if ($count > 0 && $count % 4 == 0) {
                                     echo '</div><div class="row">';
                                 }
-                        ?>
-                            <div class="col-md-3 col-sm-6 mb-4 d-none d-sm-flex">
-                                <div class='box'>
-                                    <div class='image'>
-                                        <img src='<?php echo htmlspecialchars($room_thumb); ?>' class='img-fluid'
-                                            alt='Room Thumbnail'>
-                                    </div>
-                                    <div class='content'>
-                                        <h5>
-                                            <?php echo htmlspecialchars($room_data['name']); ?>
-                                        </h5>
-
-                                        <div class='price'>
-                                            <?php echo number_format($room_data['price'], 0, ',', '.'); ?> VNĐ
+                                ?>
+                                <div class="col-md-3 col-sm-6 mb-4 d-none d-sm-flex">
+                                    <div class='box'>
+                                        <div class='image'>
+                                            <img src='<?php echo htmlspecialchars($room_thumb); ?>' class='img-fluid'
+                                                alt='Room Thumbnail'>
                                         </div>
-                                        <a href='room_details.php?id=<?php echo $room_data['room_id']; ?>'
-                                            class='btn custom-bg'>Xem thêm</a>
+                                        <div class='content'>
+                                            <h5>
+                                                <?php echo htmlspecialchars($room_data['name']); ?>
+                                            </h5>
+
+                                            <div class='price'>
+                                                <?php echo number_format($room_data['price'], 0, ',', '.'); ?> VNĐ
+                                            </div>
+                                            <a href='room_details.php?room_id=<?php echo $room_data['room_id']; ?>'
+                                                class='btn custom-bg'>Xem thêm</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <?php
+                                <?php
                                 $count++; // Tăng sau mỗi phòng
-                                }
-                                if ($count > 0) {
-                                    echo '</div>'; // Đóng thẻ div.row cuối cùng nếu có ít nhất một phòng được xuất
-                                }
-                            ?>           
+                            }
+                            if ($count > 0) {
+                                echo '</div>'; // Đóng thẻ div.row cuối cùng nếu có ít nhất một phòng được xuất
+                            }
+                            ?>
                         </div>
                         <!-- Swiper -->
                         <div class="swiper-container d-flex d-sm-none">
@@ -186,19 +186,25 @@ $rooms = getRoomDetails();
                                     if ($thumbData && $thumbRow = mysqli_fetch_assoc($thumbData)) {
                                         $room_thumb = ROOMS_IMG_PATH . $thumbRow['image_url'];
                                     }
-                                ?>
-                                <div class="swiper-slide">
-                                    <div class="box">
-                                        <div class='image'>
-                                            <img src='<?php echo htmlspecialchars($room_thumb); ?>' class='img-fluid' alt='Room Thumbnail'>
-                                        </div>
-                                        <div class='content'>
-                                            <h6><?php echo htmlspecialchars($room_data['name']); ?></h6>
-                                            <div class='price'><?php echo number_format($room_data['price'], 0, ',', '.'); ?> VNĐ</div>
-                                            <a href='room_details.php?id=<?php echo $room_data['room_id']; ?>' class='btn custom-bg'>Xem thêm</a>
+                                    ?>
+                                    <div class="swiper-slide">
+                                        <div class="box">
+                                            <div class='image'>
+                                                <img src='<?php echo htmlspecialchars($room_thumb); ?>' class='img-fluid'
+                                                    alt='Room Thumbnail'>
+                                            </div>
+                                            <div class='content'>
+                                                <h6>
+                                                    <?php echo htmlspecialchars($room_data['name']); ?>
+                                                </h6>
+                                                <div class='price'>
+                                                    <?php echo number_format($room_data['price'], 0, ',', '.'); ?> VNĐ
+                                                </div>
+                                                <a href='room_details.php?room_id=<?php echo $room_data['room_id']; ?>'
+                                                    class='btn custom-bg'>Xem thêm</a>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                                 <?php endforeach; ?>
                             </div>
                             <!-- Add Arrows -->
@@ -206,108 +212,126 @@ $rooms = getRoomDetails();
                             <div class="swiper-button-prev"></div>
                         </div>
                     </div>
-                </div>
-            </section>
-        </div>
-        <div class="col-lg-12">
-            <section id="contact">
-                <h1 class="heading"> <span>liên</span> hệ </h1>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-4 mb-3">
-                            <div class="icons">
-                                <i class="fas fa-phone">
-                                    <p>Hotline</p>
-                                </i>
-                                <p>
-                                    <?php echo $data_homestay['phone']; ?>
-                                </p>
+                </section>
+            </div>
+            <div class="col-lg-12">
+                <section id="contact">
+                    <h1 class="heading"> <span>liên</span> hệ </h1>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-4 mb-3">
+                                <div class="icons">
+                                    <i class="fas fa-phone">
+                                        <p>Hotline</p>
+                                    </i>
+                                    <p>
+                                        <?php echo $data_homestay['phone']; ?>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="icons">
-                                <i class="fas fa-envelope">
-                                    <p>Email</p>
-                                </i>
-                                <p>
-                                    <?php echo $data_homestay['email']; ?>
-                                </p>
+                            <div class="col-md-4 mb-3">
+                                <div class="icons">
+                                    <i class="fas fa-envelope">
+                                        <p>Email</p>
+                                    </i>
+                                    <p>
+                                        <?php echo $data_homestay['email']; ?>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-4 mb-3">
-                            <div class="icons">
-                                <i class="fas fa-map-marker-alt">
-                                    <p>Địa chỉ</p>
-                                </i>
-                                <p>
-                                    <?php echo $data_homestay['address']; ?>
-                                </p>
+                            <div class="col-md-4 mb-3">
+                                <div class="icons">
+                                    <i class="fas fa-map-marker-alt">
+                                        <p>Địa chỉ</p>
+                                    </i>
+                                    <p>
+                                        <?php echo $data_homestay['address']; ?>
+                                    </p>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-lg-6">
-                            <form method="POST" id="contactForm">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-12 contact">
-                                            <div class="infor">
-                                                <input class="send-msg" type="text" id="name" name="name" required />
-                                                <label for="name" class="form-label">Họ tên</label>
+                            <div class="col-lg-6">
+                                <form method="POST" id="contactForm">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12 contact">
+                                                <div class="infor">
+                                                    <input class="send-msg" type="text" id="name" name="name"
+                                                        required />
+                                                    <label for="name" class="form-label">Họ tên</label>
+                                                </div>
+                                                <div class="infor">
+                                                    <input class="send-msg" type="email" id="email" name="email"
+                                                        required />
+                                                    <label for="email" class="form-label">Email</label>
+                                                </div>
+                                                <div class="infor">
+                                                    <input class="send-msg" type="text" id="phone" name="phone"
+                                                        required />
+                                                    <label for="phone" class="form-label">Số điện thoại</label>
+                                                </div>
                                             </div>
-                                            <div class="infor">
-                                                <input class="send-msg" type="email" id="email" name="email" required />
-                                                <label for="email" class="form-label">Email</label>
+                                            <div class="col-md-12">
+                                                <div class="infor">
+                                                    <textarea class="msg-box" id="" cols="30" rows="10" name="message"
+                                                        required></textarea>
+                                                    <label for="phone" class="form-label">Lời nhắn</label>
+                                                </div>
+                                                <input type="submit" value="Gửi" class="btn custom" name="send">
                                             </div>
-                                            <div class="infor">
-                                                <input class="send-msg" type="text" id="phone" name="phone" required />
-                                                <label for="phone" class="form-label">Số điện thoại</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-12">
-                                            <div class="infor">
-                                                <textarea class="msg-box" id="" cols="30" rows="10" name="message"
-                                                    required></textarea>
-                                                <label for="phone" class="form-label">Lời nhắn</label>
-                                            </div>
-                                            <input type="submit" value="Gửi" class="btn custom" name="send">
                                         </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="col-lg-6">
-                            <iframe class="map" src="<?php echo $data_homestay['map']; ?>"
-                                allowfullscreen=true></iframe>
+                                </form>
+                            </div>
+                            <div class="col-lg-6">
+                                <iframe class="map" src="<?php echo $data_homestay['map']; ?>"
+                                    allowfullscreen=true></iframe>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
-            <div class="space" style="margin:30px;"></div>
+                </section>
+                <div class="space" style="margin:30px;"></div>
+            </div>
         </div>
     </div>
-    </div>
     <?php
-    require ('inc/footer.php');?>
+    require ('inc/footer.php'); ?>
     <script>
-        $(document).ready(function() {
-            $('#contactForm').on('submit', function(e) {
+        var swiper = new Swiper('.swiper-container', {
+        slidesPerView: 1,
+        spaceBetween: 30,
+        loop: true,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        });
+    </script>
+    <script>
+        
+        $(document).ready(function () {
+            $('#contactForm').on('submit', function (e) {
                 e.preventDefault();
-                
+
                 $.ajax({
                     type: 'POST',
                     url: '/admin/ajax/contact_process.php',
                     data: $(this).serialize(),
                     dataType: 'json',
-                    success: function(response) {
-                        if(response.status === "success")
+                    success: function (response) {
+                        if (response.status === "success")
                             createToast('success', response.message);
-                        else 
-                        createToast('error', response.message);
+                        else
+                            createToast('error', response.message);
                     },
-                    error: function() {
+                    error: function () {
                         createToast('error', response.message);
                     }
                 });
-                    
+
             });
         });
     </script>

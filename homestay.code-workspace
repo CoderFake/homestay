@@ -5,17 +5,10 @@
 			"path": "."
 		},
 		{
-			"name": "DashUI-1.0.0",
-			"path": "../DashUI-1.0.0"
-		},
-		{
 			"path": "../../Library/Mobile Documents/com~apple~CloudDocs/Documents/HoangDieu/Documents/PL"
 		},
 		{
-			"path": "../mutiple-file-project-main"
-		},
-		{
-			"path": "../pluto-1.0.0"
+			"path": "../Login and Signup Form with Email Verification - PHP"
 		}
 	],
 	"settings": {
