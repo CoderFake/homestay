@@ -1,33 +1,93 @@
-.date-picker-container {
+
+.booking-container{
+  border-radius: 8px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+}
+.label-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-between; 
+  width: 100%; 
+}
+.label-container span {
+  display: flex;
+  align-items: end;
+  padding-left: 15px;
+}
+
+.daterangepicker{
+  padding: 20px;
+  border:none;
+  border-radius: 15px; 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+
+}
+.daterangepicker .applyBtn{
+  background-color: #c39f75 !important;
+  border: 1px solid #c39f75 !important;
+  border-radius: 8px !important;
+}
+
+.daterangepicker .applyBtn:hover{
+  background-color: #fff !important;
+  color:  #c39f75 !important;
+}
+
+.daterangepicker th, .daterangepicker td{
+  padding: 5px 10px !important;
+}
+
+.daterangepicker .in-range{
+  background-color: #c39f75 !important;
+  color:#fff !important;
+}
+
+.start-date, .end-date{
+  background-color: #c39f75 !important;
+  border-radius: 20px !important;
+}
+
+.active.start-date{
+  border-radius: 20px 0 0 20px !important;
+}
+.active.end-date{
+  border-radius: 0 20px 20px 0 !important;
+}
+
+.date-picker-container input{
+  text-align: center;
+}
+.date-picker-container input:focus{
+  outline :none;
+}
+
+.daterangepicker .month{
+  font-weight: bold !important;
+}
+
+.time-picker-container {
+  display: flex;
+  justify-content: center;
   align-items: center;
-  padding: 1rem;
-  background-color: #fff; /* Màu nền cho container */
-  border-radius: 8px; /* Bo góc cho container */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng cho container */
-  margin: auto; /* Căn giữa container */
-  width: fit-content; /* Chiều rộng tự động dựa trên nội dung */
+  padding: 20px 0; 
+  border-bottom: 1px solid #ccc;
 }
 
-.date-picker {
-  margin: 0 10px;
-  padding: 0 20px;
+.time-picker {
+  margin: 0 10px; /* Spacing between time pickers */
 }
 
-.date-picker label {
-  display: block;
-  margin-bottom: 0.5rem;
+.time-picker select {
+  padding: 8px 10px;
+  border-radius: 10px;
+  text-align: center;
+  border: 1px solid #ccc;
+  background-color: white;
+  cursor: pointer;
 }
 
-.date-picker input[type="text"] {
-  display: block;
-  width: 100%; /* Chiều rộng tối đa */
-  padding: 0.75rem;
-  border-radius: 5px;
-  border: none;
- 
-}
+
+
 
 .ui-datepicker{
   padding: 30px;
@@ -38,10 +98,22 @@
   border: none;
   height: 40px;
 }
+
+.ui-datepicker-calendar td > a{
+  padding: 5px 10px !important; 
+  font-weight: bold !important;
+  text-align: center; 
+}
+.ui-datepicker-calendar th > span{
+  padding: 10px !important; 
+  text-align: center; 
+}
 .ui-icon{
   color: white;
   background-color: transparent;
 }
+
+
 
 .ui-datepicker-next .ui-icon{
     background-image: url(/images/icons/right-arr.svg) !important;
@@ -58,12 +130,9 @@
     background-position: center;
 }
 
-.ui-corner-all :hover{
-  background: none;
-}
 .ui-datepicker-month{
   border: none;
-  font-weight:bold;
+  font-weight:bold !important;
 }
 
 
@@ -87,8 +156,8 @@ select:focus {
     background:#c39f75;
     border :none;
     text-align: center;
-    border-radius:30%;
-  color: #fff;
+    border-radius: 20px 20px 20px 20px;
+    color: #fff;
 }
 
 .ui-datepicker table {
@@ -100,4 +169,49 @@ select:focus {
 } 
 .ui-state-highlight{
   color:#fd406b;
+}
+
+.number-picker-container {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.number-picker {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.number-picker-btn {
+  padding: 10px 20px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.number-picker-number {
+  padding: 10px 20px;
+  min-width: 50px;
+  text-align: center;
+  font-size: 16px;
+  background-color: #fff;
+}
+.adult img, .child img{
+    width: 25px;
+}
+.ui-datepicker-prev:hover, .ui-datepicker-next:hover img{
+  color: #c39f75 !important;
+}
+
+
+@media screen and (max-width: 768px) {
+  .ui-datepicker-calendar td > a{
+    padding: 5px 5px !important; 
+  }
+  .ui-datepicker-calendar th > span{
+    padding: 5px !important; 
+  }
+  
 }

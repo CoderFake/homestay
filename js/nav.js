@@ -4,7 +4,7 @@ function showSubnav() {
 	const setElement = document.querySelector('.settings');
 	if (extElement) {
 		if (!isMargin) {
-            extElement.style.marginTop = window.isAdminLoggedIn ? '200px' : '170px';
+            extElement.style.marginTop = window.isAdminLoggedIn ? '170px' : '140px';
 			extElement.style.borderTop = '1px solid rgba(255, 255, 255, 0.10)';
 			setElement.classList.add('clicked');
 			setElement.classList.add('diriection');

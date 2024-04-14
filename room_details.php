@@ -57,13 +57,6 @@ if (isset($_GET['room_id'])) {
 }
 
 $defaultImage = '/images/logo.png'; // Đường dẫn ảnh mặc định
-$showAllButton = false; // Biến để xác định có hiển thị nút xem tất cả không
-
-// Nếu có ít hơn hoặc bằng 5 ảnh, hiển thị tất cả, nếu không chỉ hiển thị 5 và có nút xem thêm
-if (count($roomImages) > 5) {
-    $roomImages = array_slice($roomImages, 0, 5);
-    $showAllButton = true;
-}
 
 // Lấy thumbnail, nếu không có thì dùng ảnh mặc định
 $thumbnailImage = isset($roomDetails['thumbnail']) && $roomDetails['thumbnail'] ? ROOMS_IMG_PATH . $roomDetails['thumbnail'] : $defaultImage;
@@ -71,7 +64,7 @@ $thumbnailImage = isset($roomDetails['thumbnail']) && $roomDetails['thumbnail'] 
 function getRoomFacilitiesById($roomId)
 {
     global $con;
-    $query = "SELECT f.icon, f.name, f.description 
+    $query = "SELECT f.facility_id, f.icon, f.name, f.description 
               FROM `facilities` AS f
               JOIN `room_facilities` AS rf ON f.facility_id = rf.facility_id 
               WHERE rf.room_id = ?";
@@ -97,6 +90,33 @@ if (isset($_GET['room_id'])) {
 }
 
 
+
+function getRoomStatusById($roomId)
+{
+    global $con;
+    $query = "SELECT rs.room_id, rs.status, rs.quantity
+              FROM `room_status` AS rs
+              WHERE rs.room_id = ? AND rs.status = 'Có sẵn'";
+
+    $stmt = mysqli_prepare($con, $query);
+    mysqli_stmt_bind_param($stmt, 'i', $roomId);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
+
+    $roomStatus = [];
+    if ($status = mysqli_fetch_assoc($result)) {
+        $roomStatus = $status;
+    } 
+
+    return $roomStatus;
+}
+
+if (isset($_GET['room_id'])) {
+    $roomId = $_GET['room_id'];
+    $roomStatus = getRoomStatusById($roomId);
+}
+
+
 ?>
 
 
@@ -107,13 +127,15 @@ if (isset($_GET['room_id'])) {
     <?php require ('inc/links.php'); ?>
     <link rel="stylesheet" href="css/room_details.css">
     <link rel="stylesheet" href="css/nav.css">
+    <link rel="stylesheet" href="/css/calendar.css">
 
 </head>
 
 <body>
     <?php require ('inc/header.php'); ?>
-    <div class="container">
-        <h1 class="homestay-name justify-content-start d-sm-flex"><?php echo htmlspecialchars($roomDetails['name']); ?></h1>
+    <div class="container mb-5">
+        <h1 class="homestay-name justify-content-start d-sm-flex"><?php echo htmlspecialchars($roomDetails['name']); ?>
+        </h1>
         <div class="star d-flex align-items-end mb-3">
             <div><img src="/images/icons/star.svg" alt="Star"></div>
             <div><img src="/images/icons/star.svg" alt="Star"></div>
@@ -125,7 +147,6 @@ if (isset($_GET['room_id'])) {
         <div class="row justify-content-center">
             <div class="col-lg-12 ml-5 mr-5">
                 <div class="room-images">
-
                     <!-- Swiper for the smaller images -->
                     <div class="swiper-container">
                         <div class="swiper-wrapper">
@@ -143,22 +164,146 @@ if (isset($_GET['room_id'])) {
                 </div>
             </div>
         </div>
-        <div class="row">
-                <div class="col-lg-8 mt-5">
-                    <div class="row">
-                        <?php foreach ($roomFacilities as $facility): ?>
-                            <div class="col-sm-3">
-                                <div class="facility">
-                                    <span><?php echo htmlspecialchars($facility['name']); ?></span>
-                                </div>
+        <div class="row m-1 pb-5" style="border-bottom:1px solid #ccc;">
+            <div class="col-lg-7 mt-5 h-100">
+                <div class="row">
+                    <?php foreach ($roomFacilities as $facility): ?>
+                        <div class="col-sm-3 m-0 p-1">
+                            <div class="facility">
+                                <img
+                                    src="/images/facilities/flt<?php echo htmlspecialchars($facility['facility_id']); ?>.svg">
+                                <span><?php echo htmlspecialchars($facility['name']); ?></span>
                             </div>
-                        <?php endforeach; ?>
-                    </div>
-                </div>
-                <div class="col-lg-4">
-                    <!-- Các nội dung khác của cột này -->
+                        </div>
+                    <?php endforeach; ?>
                 </div>
             </div>
+            <div class="col-lg-5 mt-5 p-0">
+                <div class="booking-container ml-lg-3 p-2">
+                    <div class="date-picker-container ml-lg-1">
+                        <input type="text" id="date-range" placeholder="Chọn ngày nhận và ngày trả" name="date-range"
+                            style="width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 40px;">
+                        <div class="time-picker-container">
+                            <div class="time-picker">
+                                <label for="time-arrival">Giờ đến:</label>
+                                <select id="time-arrival" name="time-arrival">
+                                    <?php for ($i = 0; $i < 24; $i++): ?>
+                                        <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00">
+                                            <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00
+                                        </option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                            <div class="time-picker">
+                                <label for="time-departure">Giờ đi:</label>
+                                <select id="time-departure" name="time-departure">
+                                    <?php for ($i = 0; $i < 24; $i++): ?>
+                                        <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00">
+                                            <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00
+                                        </option>
+                                    <?php endfor; ?>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="container mt-2">
+                        <div class="people">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="label-container">
+                                        <span>Người lớn</span>
+                                        <div class="number-picker-container adult">
+                                            <div class="number-picker">
+                                                <div class="number-picker-btn btn-minus"><img
+                                                        src="/images/icons/minus.svg">
+                                                </div>
+                                                <div class="number-picker-number">1</div>
+                                                <div class="number-picker-btn btn-plus"><img
+                                                        src="/images/icons/plus.svg">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="label-container">
+                                        <span>Trẻ em</span>
+                                        <div class="number-picker-container child">
+                                            <div class="number-picker">
+                                                <div class="number-picker-btn btn-minus"><img
+                                                        src="/images/icons/minus.svg">
+                                                </div>
+                                                <div class="number-picker-number">1</div>
+                                                <div class="number-picker-btn btn-plus"><img
+                                                        src="/images/icons/plus.svg">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="total mt-4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="label-container">
+                                        <span>Tổng phòng &#40;Có sẵn: <b style="color:green;"><?php echo htmlspecialchars($roomStatus['quantity']); ?></b>/<?php echo htmlspecialchars($roomDetails['room_total']); ?>&#41;:</span>
+                                        <div id="rooms-required" style="color:#f46e39;">1</div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 mt-4">
+                                    <div class="label-container">
+                                        <span>Tổng tiền:</span>
+                                        <div id="rooms-price" style="color:#f46e39;">1</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="payment-container mt-4">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="label-container">
+                                        <select class ="pay-method">
+                                            <option value="1" selected>Thanh toán online</option>
+                                            <option value="0">Thanh toán khi nhận phòng</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 mt-4">
+                                    <div class="label-container d-flex justify-content-center">
+                                       <input type ="submit" class="btn btn-paynow" value="Thanh toán ngay">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row m-1 mt-4">
+            <div class="col-sm-12">
+                <div class="desc">
+                    <h3 style="color:#f46e39;">Giới thiệu Homestay</h3>
+                    <?php
+                        $description = $roomDetails['description'];
+                        $lines = explode("\n", $description); 
+                    ?>
+                    <?php foreach ($lines as $line): ?>
+                        <p class="homestay-infor p-1 m-0 pl-2">
+                            <?php echo htmlspecialchars($line); ?>
+                        </p>
+                    <?php endforeach; ?>
+                    <h5 class="flts pl" style="color:#f46e39;">Tiện ích Homestay</h5>
+                    <?php foreach ($roomFacilities as $facility): ?>
+                        <p class="homestay-infor p-1 m-0 pl-2">
+                            <?php echo htmlspecialchars($facility['description']); ?>
+                        </p>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 
 
@@ -212,6 +357,81 @@ if (isset($_GET['room_id'])) {
 
             });
         });
+    </script>
+    <script>
+        $(function () {
+            $('#date-range').daterangepicker({
+                autoUpdateInput: false,
+                minDate: new Date(),
+                locale: {
+                    format: 'DD/MM/YYYY',
+                    applyLabel: 'Áp dụng',
+                    cancelLabel: 'Hủy bỏ',
+                    fromLabel: 'Từ',
+                    toLabel: 'Đến',
+                    customRangeLabel: 'Tùy chỉnh',
+                    weekLabel: 'W',
+                    daysOfWeek: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+                    monthNames: ['Tháng Một', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm', 'Tháng Sáu', 'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười', 'Tháng Mười Một', 'Tháng Mười Hai'],
+                    firstDay: 1
+                },
+                opens: 'center',
+                drops: 'down'
+            });
+
+            $('#date-range').on('apply.daterangepicker', function (ev, picker) {
+                $(this).val(picker.startDate.format('DD/MM/YYYY') + ' - ' + picker.endDate.format('DD/MM/YYYY'));
+            });
+
+            $('#date-range').on('cancel.daterangepicker', function (ev, picker) {
+                $(this).val('');
+            });
+        });
+        $(document).ready(function () {
+            function updateRoomCount() {
+                var adults = parseInt($('.number-picker-container.adult .number-picker-number').text());
+                var children = parseInt($('.number-picker-container.child .number-picker-number').text());
+                var totalPeople = adults + children;
+
+                var roomDetails = {
+                    adult_capacity: <?php echo $roomDetails['adult_capacity']; ?>,
+                    children_capacity: <?php echo $roomDetails['children_capacity']; ?>,
+                    price: <?php echo $roomDetails['price']; ?>,
+                    avai:  <?php echo $roomStatus['quantity']; ?>
+                };
+
+                // Tính tổng sức chứa người lớn và trẻ em
+                var roomCapacity = roomDetails.adult_capacity + roomDetails.children_capacity;
+                var roomsRequired = Math.ceil(totalPeople / roomCapacity);
+                if(roomsRequired > roomDetails.avai) roomsRequired = roomDetails.avai;
+                $('#rooms-required').text(roomsRequired);
+
+                var totalCost = roomsRequired * roomDetails.price;
+                var formattedCost = totalCost.toLocaleString('vi-VN') + 'đ';
+                $('#rooms-price').text(formattedCost);
+
+            }
+
+
+            $(document).ready(function () {
+                $('.number-picker-btn').on('click', function () {
+                    var numberPicker = $(this).siblings('.number-picker-number');
+                    var currentValue = parseInt(numberPicker.text());
+                    if ($(this).hasClass('btn-plus')) {
+                        numberPicker.text(currentValue + 1);
+                    } else if ($(this).hasClass('btn-minus')) {
+                        if (currentValue > 0) {
+                            numberPicker.text(currentValue - 1);
+                        }
+                    }
+
+                    updateRoomCount();
+                });
+            });
+            updateRoomCount();
+        });
+
+
     </script>
 
 </body>

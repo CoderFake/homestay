@@ -27,12 +27,71 @@
     border-radius:20px;
 }
 
+
 .swiper-button-next,
 .swiper-button-prev {
     width: 40px;
     height: 40px;
     background-color: var(--bg);
     border-radius: 20%;
+}
+
+.facility{
+    position: relative;
+    width: 100%;
+    background-color:#f4f0f0;
+    display: flex;
+    justify-content:center;
+    align-items:center;
+    text-align: center;
+    height: 90px;
+    border-radius: 10px;
+}
+
+.facility img{
+    width: 25px;
+    position:absolute;
+    left: 10px;
+    top:10px;
+    fill:#f46e39;
+}
+.facility span{
+    padding-top: 20px;
+}
+
+.people{
+    padding-bottom: 20px;
+    border-bottom: 1px solid #ccc;
+}
+
+.number-picker-container{
+    width: 200px !important;
+}
+
+.label-container select {
+    padding: 8px 10px;
+    border-radius: 4px;
+    width: 100%;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: white;
+    cursor: pointer;
+  }
+
+.btn-paynow{
+    background-color: #d3ad7f;
+    color: #fff;
+    border-radius: 30px;
+    padding: 5px 10px;
+}
+.btn-paynow:focus{
+    outline: none;
+}
+.btn-paynow:hover{
+    border: 1px solid #f46e39;
+    color: #f46e39;
+    background-color: #fff;
 }
 
 @media screen and (max-width: 768px) {

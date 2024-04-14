@@ -23,7 +23,6 @@
               <ul class="subnav1">
                   <li><a class="subnav-link" href="" ><i class="fas fa-user-edit"></i>&nbsp;Thông tin cá nhân</a></li>
                   <li><a class="subnav-link" href="" ><i class="fas fa-credit-card"></i>&nbsp;Lịch sử thanh toán</a></li>
-                  <li><a class="subnav-link" href="vnpay/index.php" ><i class="fas fa-shopping-cart"></i>&nbsp;Giỏ hàng</a></li>
 data;
                 if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true) || (isset($_SESSION['staffLogin']) && $_SESSION['staffLogin'] == true))
                     echo '<li><a class="subnav-link" href="admin/dashboard.php" ><i class="fa fa-gear"></i>&nbsp;Trang quản trị</a></li>';
@@ -61,7 +60,6 @@ echo<<<data
               <ul class="subnav">
                   <li><a class="subnav-link" href="index.php" ><i class="fas fa-user-edit"></i>&nbsp;Thông tin cá nhân</a></li>
                   <li><a class="subnav-link" href="indx.php" ><i class="fas fa-credit-card"></i>&nbsp;Lịch sử thanh toán</a></li>
-                  <li><a class="subnav-link" href="vnpay/index.php" ><i class="fas fa-shopping-cart"></i>&nbsp;Giỏ hàng</a></li>
 data;
                 if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true) || (isset($_SESSION['staffLogin']) && $_SESSION['staffLogin'] == true))
                     echo '<li><a class="subnav-link" href="admin/dashboard.php" ><i class="fa fa-gear"></i>&nbsp;Trang quản trị</a></li>';
@@ -97,9 +95,6 @@ echo<<<data
               <a class="nav-link" href="index.php#contact" ><i class="fas fa-phone-alt"></i>&nbsp;Liên hệ</a>
           </li>
           <li class="nav-item">
-              <a class="nav-link" href="vnpay/index.php" ><i class="fas fa-shopping-cart"></i>&nbsp;Giỏ hàng</a>
-          </li>
-          <li class="nav-item">
               <a class="nav-link" href="acc.php" ><i class="fas fa-lock"></i>&nbsp;Đăng nhập</a>
           </li>
       </ul>
@@ -124,9 +119,6 @@ echo<<<data
       <li class="nav-item horizontal">
           <a class="nav-link" href="index.php" ><i class="fas fa-phone-alt"></i>&nbsp;Liên hệ</a>
       </li>
-      <li class="nav-item horizontal">
-            <a class="nav-link" href="vnpay/index.php" ><i class="fas fa-shopping-cart"></i>&nbsp;Giỏ hàng</a>
-     </li>
       <li class="nav-item  horizontal">
           <a class="nav-link" href="acc.php" ><i class="fas fa-lock"></i>&nbsp;Đăng nhập</a>
       </li>
