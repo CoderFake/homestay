@@ -69,6 +69,7 @@ CREATE TABLE `booking_order` (
   `check_in_date` DATE NOT NULL,
   `check_out_date` DATE NOT NULL,
   `arrival_time` TIME,
+  `departure_time` TIME,
   `refund` DECIMAL(10, 2),
   `booking_status` VARCHAR(100) DEFAULT 'pending',
   `order_id` VARCHAR(150) NOT NULL,

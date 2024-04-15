@@ -106,15 +106,21 @@ function loginUser($postData)
         if ($user_data['role'] == "admin") {
             $_SESSION['adminLogin'] = true;
             $_SESSION['admin_id'] = $user_data['user_id'];
-            redirect('admin/dashboard.php');
+            $redirectUrl = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : 'admin/dashboard.php';
+            unset($_SESSION['redirect_url']);  
+            header('Location: ' . $redirectUrl);
             exit();
         } else if ($user_data['role'] == "staff") {
             $_SESSION['staffLogin'] = true;
             $_SESSION['staff_id'] = $user_data['user_id'];
-            redirect('admin/dashboard.php');
+            $redirectUrl = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : 'admin/dashboard.php';
+            unset($_SESSION['redirect_url']);  
+            header('Location: ' . $redirectUrl);
             exit();
         } else {
-            redirect('index.php');
+            $redirectUrl = isset($_SESSION['redirect_url']) ? $_SESSION['redirect_url'] : 'index.php';
+            unset($_SESSION['redirect_url']);  
+            header('Location: ' . $redirectUrl);
             exit();
         }
 

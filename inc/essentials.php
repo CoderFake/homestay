@@ -1,29 +1,26 @@
 <?php
 
-// Xác định giao thức (http hoặc https)
-$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' ? 'https' : 'http';
-
-// Xác định đường dẫn cơ sở dựa trên tên miền và thư mục chứa tệp PHP
-$basePath = $protocol . '://' . $_SERVER['HTTP_HOST'] . rtrim(dirname($_SERVER['PHP_SELF']), '/\\') . '/';
-
-// Định nghĩa BASE_URL để sử dụng trong toàn bộ ứng dụng
-
-
-// Kiểm tra xem kết nối có phải là HTTPS không
-$protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
-
-// Lấy tên host
-$host = $_SERVER['HTTP_HOST'];
-
-// Lấy đường dẫn của thư mục gốc (root directory) của project, nếu bạn có cài đặt trong sub-folder của DocumentRoot
-$path = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
-
-// Định nghĩa URL
-define('SITE_URL', $protocol . $host . $path . '/');
-define('BASE_URL', $basePath);
-define('ABOUT_IMG_PATH','images/about/');
-define('ROOMS_IMG_PATH', 'admin/'); 
-define('UPLOAD_IMAGE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/images/rooms/');
+ // Kiểm tra xem kết nối có phải là HTTPS không và xác định protocol
+ $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
+ 
+ // Lấy tên host
+ $host = $_SERVER['HTTP_HOST'];
+ 
+ // Lấy đường dẫn của thư mục gốc (root directory) của project
+ $path = rtrim(dirname($_SERVER['PHP_SELF']), '/\\');
+ 
+ // Đảm bảo rằng $path kết thúc bằng '/homestay' nếu nó không phải là thư mục gốc
+ if (!str_ends_with($path, '/homestay')) {
+     $path .= '/homestay';
+ }
+ 
+ // Định nghĩa BASE_URL để sử dụng trong toàn bộ ứng dụng
+ define('BASE_URL', $protocol . $host . '/');
+ 
+ // Các đường dẫn khác có thể dựa trên BASE_URL
+ define('ROOMS_IMG_PATH', BASE_URL . 'admin/images/');
+ define('UPLOAD_IMAGE_PATH', $_SERVER['DOCUMENT_ROOT'] . '/admin/images/rooms/');
+ define('ABOUT_IMG_PATH', BASE_URL . 'images/about/');
 
 
 function adminLogin(){

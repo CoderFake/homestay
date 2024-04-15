@@ -106,7 +106,7 @@ function getRoomStatusById($roomId)
     $roomStatus = [];
     if ($status = mysqli_fetch_assoc($result)) {
         $roomStatus = $status;
-    } 
+    }
 
     return $roomStatus;
 }
@@ -187,7 +187,8 @@ if (isset($_GET['room_id'])) {
                             <div class="time-picker">
                                 <label for="time-arrival">Giờ đến:</label>
                                 <select id="time-arrival" name="time-arrival">
-                                    <?php for ($i = 0; $i < 24; $i++): ?>
+                                    <option value="00:00" selected>00:00</option>
+                                    <?php for ($i = 1; $i < 24; $i++): ?>
                                         <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00">
                                             <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00
                                         </option>
@@ -197,7 +198,8 @@ if (isset($_GET['room_id'])) {
                             <div class="time-picker">
                                 <label for="time-departure">Giờ đi:</label>
                                 <select id="time-departure" name="time-departure">
-                                    <?php for ($i = 0; $i < 24; $i++): ?>
+                                    <option value="00:00" selected>00:00</option>
+                                    <?php for ($i = 1; $i < 24; $i++): ?>
                                         <option value="<?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00">
                                             <?= str_pad($i, 2, '0', STR_PAD_LEFT) ?>:00
                                         </option>
@@ -248,7 +250,8 @@ if (isset($_GET['room_id'])) {
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="label-container">
-                                        <span>Tổng phòng &#40;Có sẵn: <b style="color:green;"><?php echo htmlspecialchars($roomStatus['quantity']); ?></b>/<?php echo htmlspecialchars($roomDetails['room_total']); ?>&#41;:</span>
+                                        <span>Tổng phòng &#40;Có sẵn: <b
+                                                style="color:green;"><?php echo htmlspecialchars($roomStatus['quantity']); ?></b>/<?php echo htmlspecialchars($roomDetails['room_total']); ?>&#41;:</span>
                                         <div id="rooms-required" style="color:#f46e39;">1</div>
                                     </div>
                                 </div>
@@ -264,7 +267,7 @@ if (isset($_GET['room_id'])) {
                             <div class="row">
                                 <div class="col-sm-12">
                                     <div class="label-container">
-                                        <select class ="pay-method">
+                                        <select class="pay-method">
                                             <option value="1" selected>Thanh toán online</option>
                                             <option value="0">Thanh toán khi nhận phòng</option>
                                         </select>
@@ -272,7 +275,7 @@ if (isset($_GET['room_id'])) {
                                 </div>
                                 <div class="col-sm-12 mt-4">
                                     <div class="label-container d-flex justify-content-center">
-                                       <input type ="submit" class="btn btn-paynow" value="Thanh toán ngay">
+                                        <input type="submit" class="btn btn-paynow" value="Thanh toán ngay">
                                     </div>
                                 </div>
                             </div>
@@ -286,8 +289,8 @@ if (isset($_GET['room_id'])) {
                 <div class="desc">
                     <h3 style="color:#f46e39;">Giới thiệu Homestay</h3>
                     <?php
-                        $description = $roomDetails['description'];
-                        $lines = explode("\n", $description); 
+                    $description = $roomDetails['description'];
+                    $lines = explode("\n", $description);
                     ?>
                     <?php foreach ($lines as $line): ?>
                         <p class="homestay-infor p-1 m-0 pl-2">
@@ -388,50 +391,119 @@ if (isset($_GET['room_id'])) {
             });
         });
         $(document).ready(function () {
-            function updateRoomCount() {
+            function calculateDays() {
+                var dateRange = $('#date-range').val();
+                var timeArrival = $('#time-arrival option:selected').val();
+                var timeDeparture = $('#time-departure option:selected').val();
+
+                if (!dateRange.trim()) return 1; 
+
+                var dates = dateRange.split('-');
+                var startDate = $.trim(dates[0]);
+                var endDate = $.trim(dates[1]);
+
+                var startDateTime = new Date(startDate.split('/')[2], startDate.split('/')[1] - 1, startDate.split('/')[0], timeArrival.split(':')[0], timeArrival.split(':')[1]);
+                var endDateTime = new Date(endDate.split('/')[2], endDate.split('/')[1] - 1, endDate.split('/')[0], timeDeparture.split(':')[0], timeDeparture.split(':')[1]);
+
+                var hoursDiff = (endDateTime - startDateTime) / 3600000;
+                var days = Math.ceil(hoursDiff / 24);
+
+                return days;
+            }
+            var roomDetails = {
+                adult_capacity: <?php echo $roomDetails['adult_capacity']; ?>,
+                children_capacity: <?php echo $roomDetails['children_capacity']; ?>,
+                price:  parseInt(<?php echo $roomDetails['price']; ?>),
+                avai: <?php echo $roomStatus['quantity']; ?>
+            };
+            function updateRoomCount(days) {
                 var adults = parseInt($('.number-picker-container.adult .number-picker-number').text());
                 var children = parseInt($('.number-picker-container.child .number-picker-number').text());
                 var totalPeople = adults + children;
 
-                var roomDetails = {
-                    adult_capacity: <?php echo $roomDetails['adult_capacity']; ?>,
-                    children_capacity: <?php echo $roomDetails['children_capacity']; ?>,
-                    price: <?php echo $roomDetails['price']; ?>,
-                    avai:  <?php echo $roomStatus['quantity']; ?>
-                };
-
-                // Tính tổng sức chứa người lớn và trẻ em
                 var roomCapacity = roomDetails.adult_capacity + roomDetails.children_capacity;
                 var roomsRequired = Math.ceil(totalPeople / roomCapacity);
-                if(roomsRequired > roomDetails.avai) roomsRequired = roomDetails.avai;
+                roomsRequired = Math.min(roomsRequired, roomDetails.avai);
+
                 $('#rooms-required').text(roomsRequired);
 
-                var totalCost = roomsRequired * roomDetails.price;
+                var totalCost = roomsRequired * roomDetails.price * days;
                 var formattedCost = totalCost.toLocaleString('vi-VN') + 'đ';
+
                 $('#rooms-price').text(formattedCost);
-
             }
-
-
-            $(document).ready(function () {
-                $('.number-picker-btn').on('click', function () {
-                    var numberPicker = $(this).siblings('.number-picker-number');
-                    var currentValue = parseInt(numberPicker.text());
-                    if ($(this).hasClass('btn-plus')) {
-                        numberPicker.text(currentValue + 1);
-                    } else if ($(this).hasClass('btn-minus')) {
-                        if (currentValue > 0) {
-                            numberPicker.text(currentValue - 1);
-                        }
-                    }
-
-                    updateRoomCount();
-                });
+            $('#date-range').on('change', function() {
+                var days = calculateDays();
+                updateRoomCount(days);
             });
-            updateRoomCount();
+
+            $('.number-picker-btn, .applyBtn').on('click', function () {
+                var numberPicker = $(this).siblings('.number-picker-number');
+                var currentValue = parseInt(numberPicker.text());
+                if ($(this).hasClass('btn-plus')) {
+                    numberPicker.text(currentValue + 1);
+                } else if ($(this).hasClass('btn-minus') && currentValue > 0) {
+                    numberPicker.text(currentValue - 1);
+                }
+                days = calculateDays();
+                updateRoomCount(days);
+                $(this).parent().find('img').off('click');
+            });
+
+            // Gọi hàm updateRoomCount một lần khi tải trang để thiết lập giá trị ban đầu
+            updateRoomCount(1);
         });
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            $('.btn-paynow').click(function (event) {
+                event.preventDefault();
 
+                var roomId = <?php echo json_encode($roomId); ?>;
+                var roomName = <?php echo json_encode($roomDetails['name']); ?>;
+                var dateRange = $('#date-range').val().trim().replace(/ /g, '');
+                var dates = dateRange.split('-');
+                var startDate = dates[0].split('/').reverse().join('-');
+                var endDate = dates[1].split('/').reverse().join('-');
+                var timeArrival = $('#time-arrival option:selected').val().trim().replace(/ /g, '');
+                var timeDeparture = $('#time-departure option:selected').val().trim().replace(/ /g, '');
+                var price = $('#rooms-price').text().replace(/đ/g, '').replace(/\./g, '').trim();
+                var paymentMethod = $('.pay-method').val().trim();
+                if (!roomId || !dateRange || !timeArrival || !timeDeparture || !price || !paymentMethod) {
+                    createToast("error", "Vui lòng điền đầy đủ thông tin!");
+                    return;
+                }
+
+                var redirectUrl = '/payment.php'
+                $.ajax({
+                    url: '/admin/ajax/check_login.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        room_id: roomId,
+                        room_name: roomName,
+                        startDate: startDate,
+                        endDate: endDate,
+                        time_arrival: timeArrival,
+                        time_departure: timeDeparture,
+                        price: price,
+                        payment_method: paymentMethod,
+                        redirect: redirectUrl
+                    },
+                    success: function (data) {
+                        if (data.loggedIn) {
+                            window.location.href = redirectUrl;
+                        } else {
+                            window.location.href = '/acc.php';
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("Error occurred: " + error);
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
