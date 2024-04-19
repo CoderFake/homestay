@@ -28,30 +28,8 @@ if ($user['user_id'] != $_SESSION['user_id'])
     $pms = "readonly";
 
 
-$query = "
-    SELECT 
-        booking_order.booking_id,
-        booking_order.order_id,
-        rooms.name AS room_name,
-        booking_order.check_in_date,
-        booking_order.arrival_time,
-        booking_order.check_out_date,
-        booking_order.departure_time,
-        booking_order.rooms_required,
-        booking_order.transaction_id,
-        booking_order.transaction_amount,
-        booking_order.booking_status,
-        booking_order.booking_date
-    FROM 
-        booking_order
-    JOIN 
-        rooms ON booking_order.room_id = rooms.room_id
-    WHERE 
-        booking_order.user_id = ? AND booking_order.booking_status = 'success';
-";
 
-
-$bookings =  select($query, [$user['user_id']], 'i');
+$bookings =  selectAll('booking_order');
 $userdata = User();
 ?>
 
@@ -105,13 +83,7 @@ $userdata = User();
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <?php require ('../../users.php') ?>
-                    </div>
                     <div class="container bookings-container">
-                        <div class="pb-3 text-center text-md-left">
-                                <h2>Lịch sử đặt phòng</h2>
-                            </div>
                         <div class="row">
                             <div class="col">
                                 <div class="card mb-grid">
@@ -164,7 +136,6 @@ $userdata = User();
                                                             <?php endif; ?>
                                                         </td>
                                                         <td>
-                                                            <input type="hidden" name="bookingId" value="<?php echo htmlspecialchars($booking['booking_id']);?>">
                                                             <button class="btn btn-sm btn-info booking-btn-view-control">Xem</button>
                                                         </td>
                                                     </tr>

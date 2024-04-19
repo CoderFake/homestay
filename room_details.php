@@ -29,6 +29,7 @@ if (isset($_GET['room_id'])) {
     $roomDetails = getRoomDetailById($roomId);
     // Bây giờ $roomDetails sẽ chứa thông tin của phòng có id là $roomId
 }
+else redirect('index.php');
 
 // Lấy tất cả ảnh của một phòng từ cơ sở dữ liệu dựa trên ID
 function getRoomImagesById($roomId)

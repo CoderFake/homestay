@@ -87,7 +87,8 @@ CREATE TABLE `user_queries` (
   `name` VARCHAR(100) NOT NULL,
   `email` VARCHAR(100) NOT NULL,
   `phone` VARCHAR(100) NOT NULL,
-  `message` VARCHAR(255) NOT NULL
+  `message` VARCHAR(255) NOT NULL,
+  `response` BOOLEAN NOT NULL DEFAULT FALSE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 COMMIT;
 

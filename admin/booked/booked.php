@@ -5,28 +5,6 @@ require_once ('../inc/db_config.php');
 adminLogin();
 $data_homestay = readConfig();
 $users = selectOrderedUsers();
-function getUserById($user_id)
-{
-    global $con;
-    $sql = "SELECT * FROM users WHERE user_id = ? AND removed = 0";
-    $stmt = $con->prepare($sql);
-    $stmt->bind_param("i", $user_id);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
-    $stmt->close();
-    return $user;
-}
-
-
-if (isset($_GET['user_id'])) {
-    $userId = $_GET['user_id'];
-    $user = getUserById($userId);
-}
-$pms = "";
-if ($user['user_id'] != $_SESSION['user_id'])
-    $pms = "readonly";
-
 
 $query = "
     SELECT 
@@ -45,13 +23,12 @@ $query = "
     FROM 
         booking_order
     JOIN 
-        rooms ON booking_order.room_id = rooms.room_id
-    WHERE 
-        booking_order.user_id = ? AND booking_order.booking_status = 'success';
+        rooms ON booking_order.room_id = rooms.room_id;
 ";
 
 
-$bookings =  select($query, [$user['user_id']], 'i');
+$bookings =  select($query, [], '');
+
 $userdata = User();
 ?>
 
@@ -80,19 +57,16 @@ $userdata = User();
                         <ol class="breadcrumb adminx-page-breadcrumb">
                             <li class="breadcrumb-item"><a href="/admin/dashboard.php">Home</a></li>
                             <li class="breadcrumb-item"><a href="/admin/users/users.php">Quản lý người dùng</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">
-                                <?php if ($user['user_id'] != $_SESSION['user_id']): ?> Xem thông tin người
-                                    dùng<?php else: ?>Sửa thông tin <?php endif; ?></li>
+                            <li class="breadcrumb-item active" aria-current="page">Danh sách đặt phòng</li>
                         </ol>
                     </nav>
                     <div class="row">
                         <div class="col-lg-6">
                             <div class="pb-3 text-center text-md-left">
-                                <h2><?php if ($user['user_id'] != $_SESSION['user_id']): ?> Xem thông tin người
-                                        dùng<?php else: ?>Sửa thông tin <?php endif; ?></h2>
+                                <h2>Danh sách đặt phòng</h2>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <!-- <div class="col-lg-6">
                             <div class="form-group d-flex justify-content-end align-items-center">
                                 <select class="form-control" id="userSelect" name="userSelect">
                                     <option value="">Chọn người dùng</option>
@@ -103,15 +77,9 @@ $userdata = User();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <?php require ('../../users.php') ?>
+                        </div> -->
                     </div>
                     <div class="container bookings-container">
-                        <div class="pb-3 text-center text-md-left">
-                                <h2>Lịch sử đặt phòng</h2>
-                            </div>
                         <div class="row">
                             <div class="col">
                                 <div class="card mb-grid">
@@ -147,7 +115,7 @@ $userdata = User();
                                                             <?php echo htmlspecialchars(number_format(intval($booking['transaction_amount'])))."đ"; ?>
                                                         </td>
                                                         <td>
-                                                            <?php if ( (isset($_SESSION['admin_id']) && $_SESSION['admin_id'] == $user['user_id'])) :?>
+                                                            <?php if ( (isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] ==true)) :?>
                                                                 <select class="badge badge-pill badge-primary border-0" id="userBooked">
                                                                     <option value="<?php echo htmlspecialchars($booking['booking_status']);?>" <?php if($booking['booking_status'] == "canceled"):?> selected <?php endif; ?>>Huỷ bỏ</option>
                                                                     <option value="<?php echo htmlspecialchars($booking['booking_status']);?>" <?php if($booking['booking_status'] == "pending"):?> selected <?php endif; ?>>Chờ thanh toán</option>

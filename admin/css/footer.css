@@ -862,10 +862,10 @@ input[readonly] {
     background-color: transparent !important; 
 }
 textarea[disabled] {
-    background-color: transparent !important; 
+    background-color: #fff !important; 
 }
 textarea {
-    background-color: transparent !important; 
+    background-color: #fff !important; 
 }
 
 @media screen and (max-width: 768px) {

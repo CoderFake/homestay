@@ -67,7 +67,7 @@
               <img src="<?php if($userdata['profile_pic'] == "user_default.png"){ ?>/../images/user_default.png<?php } else{?>/admin/images/users/<?php echo $_SESSION['user_id'] . "/". $userdata['profile_pic']; }?>" class="d-inline-block align-top" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="inf_users.php?user_id=<?php echo $_SESSION['user_id'];?>">Thông tin cá nhân</a>
+              <a class="dropdown-item" href="/admin/users/inf_users.php?user_id=<?php echo $_SESSION['user_id'];?>">Thông tin cá nhân</a>
               <a class="dropdown-item" href="#">Việc cần làm</a>
               <a class="dropdown-item" href="#">Cài đặt</a>
               <div class="dropdown-divider"></div>
@@ -216,23 +216,23 @@
 
             <ul class="sidebar-sub-nav collapse" id="example">
               <li class="sidebar-nav-item">
-                <a href="./layouts/charts_chartjs.html" class="sidebar-nav-link">
+                <a href="/admin/contact/contact.php" class="sidebar-nav-link">
                   <span class="sidebar-nav-abbr">
-                    Ch
+                    Ct
                   </span>
                   <span class="sidebar-nav-name">
-                    ChartJS
+                    Danh sách tư vấn
                   </span>
                 </a>
               </li>
 
               <li class="sidebar-nav-item">
-                <a href="./layouts/charts_morris.html" class="sidebar-nav-link">
+                <a href="/admin/contact/response.php" class="sidebar-nav-link">
                   <span class="sidebar-nav-abbr">
-                    Mo
+                    Rs
                   </span>
                   <span class="sidebar-nav-name">
-                    Morris
+                    Phản hồi khách hàng
                   </span>
                 </a>
               </li>
@@ -245,7 +245,7 @@
                 <i data-feather="edit"></i>
               </span>
               <span class="sidebar-nav-name">
-                Forms
+                Quản lý đặt phòng
               </span>
               <span class="sidebar-nav-end">
                 <i data-feather="chevron-right" class="nav-collapse-icon"></i>
@@ -254,23 +254,23 @@
 
             <ul class="sidebar-sub-nav collapse" id="navForms">
               <li class="sidebar-nav-item">
-                <a href="./layouts/form_elements.html" class="sidebar-nav-link">
+                <a href="/admin/booked/accept.php" class="sidebar-nav-link">
                   <span class="sidebar-nav-abbr">
-                    El
+                    Ap
                   </span>
                   <span class="sidebar-nav-name">
-                    Elements
+                    Xác nhận đặt phòng
                   </span>
                 </a>
               </li>
 
               <li class="sidebar-nav-item">
-                <a href="./layouts/form_advanced.html" class="sidebar-nav-link">
+                <a href="/admin/booked/booked.php" class="sidebar-nav-link">
                   <span class="sidebar-nav-abbr">
                     Ad
                   </span>
                   <span class="sidebar-nav-name">
-                    Advanced Elements
+                    Danh sách đã đặt
                   </span>
                 </a>
               </li>

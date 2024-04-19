@@ -91,7 +91,12 @@ $(document).ready(function () {
         var searchValue = $(this).siblings('.input-view-control').val();
         window.location.href = '/admin/users/inf_users.php?user_id=' + searchValue;
     });
-
+    
+    $('.booking-btn-view-control').on('click', function() {
+        var searchValue = $(this).closest('td').find('input[type="hidden"]').val();
+        window.location.href = '/admin/bill.php?booking_id=' + searchValue;
+    });
+    
     $('#btnAdd').on('click', function () {
         window.location.href = '/admin/rooms/add_room.php';
     });
