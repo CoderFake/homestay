@@ -1,23 +1,7 @@
 {
-	"folders": [
-		{
-			"name": "homestay",
-			"path": "."
-		},
-		{
-			"path": "../../Library/Mobile Documents/com~apple~CloudDocs/Documents/HoangDieu/Documents/PL"
-		},
-		{
-			"path": "../Login and Signup Form with Email Verification - PHP"
-		},
-		{
-			"path": "../hotel-datepicker"
-		},
-		{
-			"path": "../dtmn"
-		}
-	],
-	"settings": {
-		"liveServer.settings.multiRootWorkspaceName": "homestay"
-	}
+    "folders": [
+        {
+            "path": "."
+        }
+    ]
 }

@@ -575,7 +575,7 @@ $userdata = User();
                         url: '/admin/ajax/rm_room.php',
                         type: 'POST',
                         dataType: 'json',
-                        data: { room_ids: JSON.stringify(roomIds)}, // Giả định rằng roomIds là một mảng
+                        data: { room_ids: JSON.stringify(roomIds)}, 
                         success: function (response) {
                             closeload();
                             if(response.status)

@@ -4,6 +4,8 @@ session_start();
 require '../inc/essentials.php';
 adminLogin();
 require '../inc/db_config.php';
+
+
 if (isset($_POST['room_ids'])) {
     // Giả định $_POST['room_ids'] là một mảng JSON-encoded
     $roomIds = json_decode($_POST['room_ids'], true);

@@ -1,4 +1,6 @@
 <?php
+
+
 $hname='lananhdb.cv4aaguu00vj.ap-southeast-2.rds.amazonaws.com';
 $uname='admin';
 $pass='Lananh2003';

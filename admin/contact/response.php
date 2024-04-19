@@ -13,381 +13,178 @@ function getQueryById($query_id)
     $stmt->bind_param("i", $query_id);
     $stmt->execute();
     $result = $stmt->get_result();
-    $querie = $result->fetch_assoc();
+    $query = $result->fetch_assoc();
     $stmt->close();
-    return $querie;
+    return $query;
 }
 
 
 if (isset($_GET['query_id'])) {
     $query_id = $_GET['query_id'];
-    $querie = getQueryById($query_id);
-}
-else redirect('/admin/dashboard.php');
-
-
-
-$query = "
-    SELECT *
-    FROM user_queries
-    WHERE response = FALSE
-    ORDER BY query_id ASC;
-";
-$queries = select($query, [], '');
+    $query = getQueryById($query_id);
+} else
+    redirect('/admin/dashboard.php');
+ 
 $userdata = User();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <?php require ("../inc/links.php") ?>
-    <link rel="stylesheet" type="text/css" href="/admin/dist/css/admin.css" media="screen" />
 </head>
 
 <body>
     <div class="adminx-container">
-        <!-- Header -->
         <?php require ("../inc/header.php") ?>
-
-        <!-- Main Content -->
+        <!-- adminx-content-aside -->
         <div class="adminx-content">
-            <div class="adminx-main-content">
+            <div class="adminx-main-content" style="padding-bottom:60px;">
                 <div class="container-fluid">
                     <!-- BreadCrumb -->
                     <nav aria-label="breadcrumb" role="navigation">
                         <ol class="breadcrumb adminx-page-breadcrumb">
-                            <li class="breadcrumb-item"><a href="#">Home</a></li>
-                            <li class="breadcrumb-item"><a href="#">Charts</a></li>
-                            <li class="breadcrumb-item active  aria-current=" page">ChartJS</li>
+                            <li class="breadcrumb-item"><a href="/admin/dashboard.php">Home</a></li>
+                            <li class="breadcrumb-item"><a href="/admin/contact/contact.php">Tin nhắn tư vấn</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Phản hồi khách hàng</li>
                         </ol>
                     </nav>
-
-                    <div class="pb-3">
-                        <h1>Phản hồi tin nhắn</h1>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="pb-3 text-center text-md-left">
+                                <h2 class="my-4">Phản hồi khách hàng</h2>
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="form-group d-flex justify-content-end align-items-center">
+                                <button type="submit" id="submitBtnMess" class="btn btn-primary">Cập nhật</button>
+                            </div>
+                        </div>
                     </div>
-
 
                     <div class="row">
                         <div class="col-lg-6">
-                            <div class="card mb-grid">
-                                <div class="card-header d-flex justify-content-between align-items-center">
-                                    <div class="card-header-title">Basic Form Example</div>
-
-                                    <nav class="card-header-actions">
-                                        <a class="card-header-action" data-toggle="collapse" href="#card1"
-                                            aria-expanded="false" aria-controls="card1">
-                                            <i data-feather="minus-circle"></i>
-                                        </a>
-
-                                        <div class="dropdown">
-                                            <a class="card-header-action" href="#" role="button" id="card1Settings"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i data-feather="settings"></i>
-                                            </a>
-
-                                            <div class="dropdown-menu dropdown-menu-right"
-                                                aria-labelledby="card1Settings">
-                                                <a class="dropdown-item" href="#">Action</a>
-                                                <a class="dropdown-item" href="#">Another action</a>
-                                                <a class="dropdown-item" href="#">Something else here</a>
-                                            </div>
-                                        </div>
-
-                                        <a href="#" class="card-header-action">
-                                            <i data-feather="x-circle"></i>
-                                        </a>
-                                    </nav>
-                                </div>
-                                <div class="card-body collapse show" id="card1">
-                                    <form>
-                                        <div class="form-group">
-                                            <label class="form-label" for="exampleInputEmail1">Email address</label>
-                                            <input type="email" class="form-control" id="exampleInputEmail1"
-                                                aria-describedby="emailHelp" placeholder="Enter email">
-                                            <small id="emailHelp" class="form-text text-muted">We'll never share your
-                                                email with anyone else.</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label" for="exampleInputPassword1">Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1"
-                                                placeholder="Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="custom-control custom-checkbox">
-                                                <input type="checkbox" class="custom-control-input" id="customCheck1">
-                                                <label class="custom-control-label" for="customCheck1">Remember
-                                                    me</label>
-                                            </div>
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="card mb-grid">
+                            <div class="card w-100">
                                 <div class="card-header">
-                                    <div class="card-header-title">Input sizes</div>
-                                </div>
-                                <div class="card-body">
-                                    <input class="form-control mb-2 form-control-lg" type="text"
-                                        placeholder=".form-control-lg">
-                                    <input class="form-control mb-2" type="text" placeholder="Default input">
-                                    <input class="form-control form-control-sm" type="text"
-                                        placeholder=".form-control-sm">
-                                </div>
-                            </div>
-
-                            <div class="card mb-grid">
-                                <div class="card-header">
-                                    <div class="card-header-title">Column sizing</div>
+                                    <div class="card-header-title p-1">Thông tin</div>
                                 </div>
                                 <div class="card-body">
                                     <form>
-                                        <div class="form-row">
-                                            <div class="col-7">
-                                                <input type="text" class="form-control" placeholder="City">
-                                            </div>
-                                            <div class="col">
-                                                <input type="text" class="form-control" placeholder="State">
-                                            </div>
-                                            <div class="col">
-                                                <input type="text" class="form-control" placeholder="Zip">
-                                            </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="customerName">Tên khách hàng</label>
+                                            <input type="text" class="form-control mb-3" name="customerName"
+                                                value="<?php echo htmlspecialchars($query['name']); ?>"
+                                                id="customerName" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="customerEmail">Email</label>
+                                            <input class="form-control h-100" id="customerEmail" name="customerEmail"
+                                                value="<?php echo htmlspecialchars($query['email']); ?>" readonly />
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="form-label" for="customerPhone">Số điện thoại</label>
+                                            <input class="form-control h-100" id="customerPhone" name="customerPhone"
+                                                value="<?php echo htmlspecialchars($query['phone']); ?>" readonly />
                                         </div>
                                     </form>
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <div class="card-header-title">Tin nhắn khách hàng</div>
 
-                            <div class="card mb-grid">
-                                <div class="card-header">
-                                    <div class="card-header-title">Validation</div>
-                                </div>
-                                <div class="card-body">
-                                    <p>
-                                        The example below uses a flexbox utility to vertically center the contents and
-                                        changes <code class="highlighter-rouge">.col</code> to <code
-                                            class="highlighter-rouge">.col-auto</code> so that your columns only take up
-                                        as much space as needed. Put another way, the column sizes itself based on the
-                                        contents.
-                                    </p>
-                                    <form id="needs-validation" novalidate>
-                                        <div class="form-row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label" for="validationCustom01">First name</label>
-                                                <input type="text" class="form-control" id="validationCustom01"
-                                                    placeholder="First name" value="Mark" required>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label" for="validationCustom02">Last name</label>
-                                                <input type="text" class="form-control" id="validationCustom02"
-                                                    placeholder="Last name" value="Otto" required>
+                                            <nav class="card-header-actions p-0">
+                                                <a class="card-header-action" data-toggle="collapse" href="#card1"
+                                                    aria-expanded="false" aria-controls="card1">
+                                                    <i data-feather="minus-circle" class="zoom-in"></i>
+                                                    <i data-feather="plus-circle" class="zoom-out hid"></i>
+                                                </a>
+
+                                            </nav>
+                                        </div>
+                                        <div class="form collapse show" id="card1">
+                                            <div class="form-group m-4">
+                                                <textarea class="form-control p-10 w-60 pt-3" name="messageCustomer" id="desc" cols="30"
+                                                    rows="5" disabled><?php echo htmlspecialchars($query['message']); ?></textarea>
                                             </div>
                                         </div>
-                                        <div class="form-row">
-                                            <div class="col-md-6 mb-3">
-                                                <label class="form-label" for="validationCustom03">City</label>
-                                                <input type="text" class="form-control" id="validationCustom03"
-                                                    placeholder="City" required>
-                                                <div class="invalid-feedback">
-                                                    Please provide a valid city.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="validationCustom04">State</label>
-                                                <input type="text" class="form-control" id="validationCustom04"
-                                                    placeholder="State" required>
-                                                <div class="invalid-feedback">
-                                                    Please provide a valid state.
-                                                </div>
-                                            </div>
-                                            <div class="col-md-3 mb-3">
-                                                <label class="form-label" for="validationCustom05">Zip</label>
-                                                <input type="text" class="form-control" id="validationCustom05"
-                                                    placeholder="Zip" required>
-                                                <div class="invalid-feedback">
-                                                    Please provide a valid zip.
-                                                </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="card">
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <div class="card-header-title">Tin nhắn</div>
+
+                                            <nav class="card-header-actions p-0">
+                                                <a class="card-header-action" data-toggle="collapse" href="#card2"
+                                                    aria-expanded="false" aria-controls="card2">
+                                                    <i data-feather="minus-circle" class="zoom-in"></i>
+                                                    <i data-feather="plus-circle" class="zoom-out hid"></i>
+                                                </a>
+
+                                            </nav>
+                                        </div>
+                                        <div class="form collapse show" id="card2">
+                                            <div class="form-group m-4">
+                                                <textarea class="form-control p-10 w-60 pt-3" name="message" id="desc" cols="30"
+                                                    rows="5"></textarea>
                                             </div>
                                         </div>
-                                        <button class="btn btn-primary mr-2" type="submit">Submit form</button>
-                                        <small class="text-muted">
-                                            Click submit to test validation feature
-                                        </small>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="card mb-grid">
-                                <div class="card-header">
-                                    File upload
-                                </div>
-                                <div class="card-body">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="customFile">
-                                        <label class="custom-file-label" for="customFile">Choose file</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-
-                        <div class="col-lg-6">
-                            <div class="card mb-grid">
-                                <div class="card-header">
-                                    <div class="card-header-title">Horizontal form</div>
-                                </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="form-group row">
-                                            <label for="inputEmail3"
-                                                class="col-sm-2 col-form-label form-label">Email</label>
-                                            <div class="col-sm-10">
-                                                <input type="email" class="form-control" id="inputEmail3"
-                                                    placeholder="Email">
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="inputPassword3"
-                                                class="col-sm-2 col-form-label form-label">Password</label>
-                                            <div class="col-sm-10">
-                                                <input type="password" class="form-control" id="inputPassword3"
-                                                    placeholder="Password">
-                                            </div>
-                                        </div>
-                                        <fieldset class="form-group">
-                                            <div class="row">
-                                                <legend class="col-form-legend col-sm-2 form-label">Radios</legend>
-                                                <div class="col-sm-10">
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="gridRadios" id="gridRadios1" value="option1"
-                                                                checked>
-                                                            Option one is this and that&mdash;be sure to include why
-                                                            it's great
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="gridRadios" id="gridRadios2" value="option2">
-                                                            Option two can be something else and selecting it will
-                                                            deselect option one
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check disabled">
-                                                        <label class="form-check-label">
-                                                            <input class="form-check-input" type="radio"
-                                                                name="gridRadios" id="gridRadios3" value="option3"
-                                                                disabled>
-                                                            Option three is disabled
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </fieldset>
-                                        <div class="form-group row">
-                                            <div class="col-sm-2 form-label pt-1">Checkbox</div>
-                                            <div class="col-sm-10">
-                                                <div class="form-check">
-                                                    <label class="form-check-label">
-                                                        <input class="form-check-input" type="checkbox"> Check me out
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <div class="col-sm-10">
-                                                <button type="submit" class="btn btn-primary">Sign in</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="card mb-grid">
-                                <div class="card-header">
-                                    <div class="card-header-title">Form controls</div>
-                                </div>
-                                <div class="card-body">
-                                    <p>
-                                        Textual form controls—like <code
-                                            class="highlighter-rouge">&lt;input&gt;</code>s, <code
-                                            class="highlighter-rouge">&lt;select&gt;</code>s, and <code
-                                            class="highlighter-rouge">&lt;textarea&gt;</code>s—are styled with the <code
-                                            class="highlighter-rouge">.form-control</code> class. Included are styles
-                                        for general appearance, focus state, sizing, and more.
-                                    </p>
-                                    <form>
-                                        <div class="form-group">
-                                            <label class="form-label" for="exampleFormControlInput1">Email
-                                                address</label>
-                                            <input type="email" class="form-control" id="exampleFormControlInput1"
-                                                placeholder="name@example.com">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label" for="exampleFormControlSelect1">Example
-                                                select</label>
-                                            <select class="form-control" id="exampleFormControlSelect1">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label" for="exampleFormControlSelect2">Example multiple
-                                                select</label>
-                                            <select multiple class="form-control" id="exampleFormControlSelect2">
-                                                <option>1</option>
-                                                <option>2</option>
-                                                <option>3</option>
-                                                <option>4</option>
-                                                <option>5</option>
-                                            </select>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label" for="exampleFormControlTextarea1">Example
-                                                textarea</label>
-                                            <textarea class="form-control" id="exampleFormControlTextarea1"
-                                                rows="3"></textarea>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-
-                            <div class="card mb-grid">
-                                <div class="card-header">
-                                    <div class="card-header-title">Validation errors</div>
-                                </div>
-                                <div class="card-body">
-                                    <form>
-                                        <div class="form-group">
-                                            <label class="form-label is-invalid">Invalid Field</label>
-                                            <input type="email" class="form-control is-invalid"
-                                                aria-describedby="emailHelp" placeholder="Enter email">
-                                            <small id="emailHelp" class="form-text invalid-feedback">We'll never share
-                                                your email with anyone else.</small>
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-label is-valid">VALID</label>
-                                            <input type="password" class="form-control is-valid" placeholder="Password">
-                                        </div>
-                                        <button type="submit" class="btn btn-primary">Submit</button>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
                     </div>
-
                 </div>
             </div>
+            <div class="admin-footer w-100 mt-10" style="height: 60px;"></div>
         </div>
     </div>
-    <!-- // Main Content -->
-    </div>
     <?php require ("../inc/footer.php") ?>
+    <script>
+        $(document).ready(function() {
+            var urlParams = new URLSearchParams(window.location.search);
+            var searchValue = urlParams.get('query_id');
+            $('#submitBtnMess').click(function(e) {
+                e.preventDefault(); 
+                var queryId = searchValue ;
+                var customerName = $('#customerName').val();
+                var customerEmail = $('#customerEmail').val();
+                var customerPhone = $('#customerPhone').val();
+                var message = $('textarea[name="message"]').val();
+
+                load();
+                $.ajax({
+                    url: '/admin/ajax/send_message.php', 
+                    type: 'POST', 
+                    data: {
+                        'query_id': queryId,
+                        'customerName': customerName,
+                        'customerEmail': customerEmail,
+                        'customerPhone': customerPhone,
+                        'message': message
+                    },
+                    dataType: 'json',
+                    success: function(response) { 
+                        closeload();
+                        console.log(response.status);
+                        createToast(response.status, response.message);
+                    },
+                    error: function(xhr, status, error) {
+                        closeload();
+                        createToast('error', 'Có lỗi xảy ra, vui lòng thử lại!');
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 
 </html>

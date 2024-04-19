@@ -5,30 +5,11 @@ require_once ('../inc/db_config.php');
 adminLogin();
 $data_homestay = readConfig();
 $users = selectOrderedUsers();
-// function getUserById($user_id)
-// {
-//     global $con;
-//     $sql = "SELECT * FROM users WHERE user_id = ? AND removed = 0";
-//     $stmt = $con->prepare($sql);
-//     $stmt->bind_param("i", $user_id);
-//     $stmt->execute();
-//     $result = $stmt->get_result();
-//     $user = $result->fetch_assoc();
-//     $stmt->close();
-//     return $user;
-// }
-
-
-// if (isset($_GET['user_id'])) {
-//     $userId = $_GET['user_id'];
-//     $user = getUserById($userId);
-// }
 
 $query = "
     SELECT *
     FROM user_queries
-    WHERE response = FALSE
-    ORDER BY query_id ASC;
+    ORDER BY response ASC;
 ";
 
 
@@ -50,9 +31,7 @@ $userdata = User();
         <?php require ("../inc/header.php") ?>
         <!-- adminx-content-aside -->
         <div class="adminx-content">
-            <!-- <div class="adminx-aside">
 
-        </div> -->
 
             <div class="adminx-main-content" style="padding-bottom:60px;">
                 <div class="container-fluid">
@@ -70,7 +49,7 @@ $userdata = User();
                                 <h2>Danh sách tư vấn</h2>
                             </div>
                         </div>
-                        <div class="col-lg-6">
+                        <!-- <div class="col-lg-6">
                             <div class="form-group d-flex justify-content-end align-items-center">
                                 <select class="form-control" id="userSelect" name="userSelect">
                                     <option value="">Chọn người dùng</option>
@@ -81,7 +60,7 @@ $userdata = User();
                                     <?php endforeach; ?>
                                 </select>
                             </div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="container contact-history-container">
                         <div class="row">
@@ -104,9 +83,10 @@ $userdata = User();
                                                         <td><?php echo htmlspecialchars($query['name']); ?></td>
                                                         <td><?php echo htmlspecialchars($query['email']); ?></td>
                                                         <td><?php echo htmlspecialchars($query['phone']); ?></td>
-                                                        <td><?php echo $query['response'] ? '<span class="badge badge-pill badge-success">Đã phản hồi</span>' : '<span class="badge badge-pill badge-warning">Chưa phản hồi</span>'; ?>
+                                                        <td><?php echo $query['response'] == 1 ? '<span class="badge badge-pill badge-success">Đã phản hồi</span>' : '<span class="badge badge-pill badge-warning">Chưa phản hồi</span>'; ?>
                                                         </td>
                                                         <td>
+                                                            <input type="hidden" name="queryId" value="<?php echo htmlspecialchars($query['query_id']);?>">
                                                             <?php echo !$query['response'] ? '<button class="btn btn-sm btn-info contact-btn-view-control">Trả lời</button>' : '';?>
                                                         </td>
                                                     </tr>
@@ -131,9 +111,9 @@ $userdata = User();
     <?php require ("../inc/footer.php") ?>
     <script>
         $(document).ready(function () {
-            $('.input-file-trigger').click(function (event) {
-                event.preventDefault();
-                $(this).siblings('.input-file').click();
+            $('.contact-btn-view-control').on('click', function() {
+                var searchValue = $(this).closest('td').find('input[type="hidden"]').val();
+                window.location.href = '/admin/contact/response.php?query_id=' + searchValue;
             });
         });
     </script>
