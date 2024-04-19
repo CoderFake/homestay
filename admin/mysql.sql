@@ -76,7 +76,7 @@ CREATE TABLE `booking_order` (
   `transaction_id` VARCHAR(200),
   `transaction_amount` DECIMAL(10, 2) NOT NULL,
   `transaction_status` VARCHAR(100) DEFAULT 'pending',
-  `transaction_response_message` TEXT,
+  `rooms_required` INT NOT NULL,
   `booking_date` DATETIME DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`),
   FOREIGN KEY (`room_id`) REFERENCES `rooms`(`room_id`)

@@ -31,6 +31,7 @@ if (isset($_SESSION['booking_details'])) {
     <?php require ('inc/header.php'); ?>
     <?php require_once ("vnpay/config.php"); ?>
     <div class="container">
+        <?php if(isset($_SESSION['paymentMethod']) && $_SESSION['paymentMethod'] == "1") :?>
             <div class="payment-form">
                 <h2 class="col-lg-12 text-center"> THANH TOÁN</h2>
                 <div class="row" style="width:100%;">
@@ -108,6 +109,7 @@ if (isset($_SESSION['booking_details'])) {
                 </div>
                 <div class="col-lg-12 sub-footer"></div>
             </div>
+        <?php endif;?>
     </div>
     <?php require ('inc/footer.php'); ?>
     <script>

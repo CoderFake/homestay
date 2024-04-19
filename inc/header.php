@@ -21,8 +21,8 @@
           <li class="nav-item setting1 diriection">
               <a class="nav-link" href="" ><i class="fas fa-user-alt"></i>&nbsp; $_SESSION[user_name] &nbsp;<span class="rot fa fa-caret-right"></span></a>
               <ul class="subnav1">
-                  <li><a class="subnav-link" href="" ><i class="fas fa-user-edit"></i>&nbsp;Thông tin cá nhân</a></li>
-                  <li><a class="subnav-link" href="" ><i class="fas fa-credit-card"></i>&nbsp;Lịch sử thanh toán</a></li>
+                  <li><a class="subnav-link" href="profile.php" ><i class="fas fa-user-edit"></i>&nbsp;Thông tin cá nhân</a></li>
+                  <li><a class="subnav-link" href="bill_history.php" ><i class="fas fa-credit-card"></i>&nbsp;Lịch sử thanh toán</a></li>
 data;
                 if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true) || (isset($_SESSION['staffLogin']) && $_SESSION['staffLogin'] == true))
                     echo '<li><a class="subnav-link" href="admin/dashboard.php" ><i class="fa fa-gear"></i>&nbsp;Trang quản trị</a></li>';
@@ -58,8 +58,8 @@ echo<<<data
           <li onclick= showSubnav() class="nav-item settings horizontal">
               <p class="nav-link"><i class="fas fa-user-alt"></i>&nbsp;$_SESSION[user_name] &nbsp;<i style="color:#fff;" class="rot fa fa-caret-right"></i></p>
               <ul class="subnav">
-                  <li><a class="subnav-link" href="index.php" ><i class="fas fa-user-edit"></i>&nbsp;Thông tin cá nhân</a></li>
-                  <li><a class="subnav-link" href="indx.php" ><i class="fas fa-credit-card"></i>&nbsp;Lịch sử thanh toán</a></li>
+                  <li><a class="subnav-link" href="profile.php" ><i class="fas fa-user-edit"></i>&nbsp;Thông tin cá nhân</a></li>
+                  <li><a class="subnav-link" href="bill_history.php" ><i class="fas fa-credit-card"></i>&nbsp;Lịch sử thanh toán</a></li>
 data;
                 if((isset($_SESSION['adminLogin']) && $_SESSION['adminLogin'] == true) || (isset($_SESSION['staffLogin']) && $_SESSION['staffLogin'] == true))
                     echo '<li><a class="subnav-link" href="admin/dashboard.php" ><i class="fa fa-gear"></i>&nbsp;Trang quản trị</a></li>';

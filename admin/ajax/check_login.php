@@ -9,11 +9,11 @@ if (isset($_SESSION['login']) && $_SESSION['login'] === true) {
 }
 
 // Lưu phương thức thanh toán và chi tiết đặt phòng vào session
-if (isset($_POST['paymentMethod'])) {
-    $_SESSION['paymentMethod'] = $_POST['paymentMethod'];
+if (isset($_POST['payment_method'])) {
+    $_SESSION['paymentMethod'] = $_POST['payment_method'];
 }
 
-if (isset($_POST['room_id'], $_POST['room_name'], $_POST['startDate'], $_POST['endDate'], $_POST['time_arrival'], $_POST['time_departure'], $_POST['price'])) {
+if (isset($_POST['room_id'], $_POST['room_name'], $_POST['startDate'], $_POST['endDate'], $_POST['time_arrival'], $_POST['time_departure'], $_POST['roomsRequired'], $_POST['price'])) {
     $_SESSION['booking_details'] = [
         'room_id' => $_POST['room_id'],
         'room_name' => $_POST['room_name'],
@@ -21,6 +21,7 @@ if (isset($_POST['room_id'], $_POST['room_name'], $_POST['startDate'], $_POST['e
         'endDate' => $_POST['endDate'],
         'time_arrival' => $_POST['time_arrival'],
         'time_departure' => $_POST['time_departure'],
+        'roomsRequired' => $_POST['roomsRequired'],
         'price' => $_POST['price']
     ];
 }

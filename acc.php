@@ -62,7 +62,7 @@ function registerUser($postData)
     $enc_pass = password_hash($data['password'], PASSWORD_BCRYPT);
     $expiryDate = date('Y-m-d H:i:s', strtotime('+24 hours'));
     $query = "INSERT INTO `users` (`name`, `email`, `phone_number`, `password`, `token`, `expired_token`, `profile_pic`, `role`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-    $values = [$data['name'], $data['email'], $data['phone'], $enc_pass, $token, $expiryDate, "user_default.jpg", "customer"];
+    $values = [$data['name'], $data['email'], $data['phone'], $enc_pass, $token, $expiryDate, "user_default.png", "customer"];
     if (!insert($query, $values, 'ssssssss')) {
         $errorMsg[] = 'error:Đăng ký thất bại. Vui lòng thử lại sau.';
     } else {

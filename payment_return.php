@@ -13,38 +13,55 @@ $amount = $_GET['vnp_Amount'] ?? null;
 $order_desc = $_GET['vnp_OrderInfo'] ?? null;
 $vnp_TransactionNo = $_GET['vnp_TransactionNo'] ?? null;
 $msg = "";
+$amount = $amount / 100; 
 unset($_SESSION['paymentMethod']);
-if (isset($_SESSION['booking_details'])) {
-    $bookingDetails = $_SESSION['booking_details'];
-    $userId = $_SESSION['user_id'];
-    $roomId = $bookingDetails['room_id'];
-    $roomName = $bookingDetails['room_name'];
-    $startDate = $bookingDetails['startDate'];
-    $endDate = $bookingDetails['endDate'];
-    $arrivalTime = $bookingDetails['time_arrival'];
-    $departureTime = $bookingDetails['time_departure'];
-    $price = $bookingDetails['price'];
-} else {
-    echo '<div class="notice">error: Thông tin bị thiếu, vui lòng điền đầy đủ!</div>';
-    exit();
+if (!isset($_SESSION['booking_details'])) {
+    $msg =  '<div class="notice">error: Thông tin đặt phòng bị thiếu, vui lòng thử lại!</div>';
+    exit;
 }
-if($vnp_ResponseCode == "00"){
-    // global $con;
-    // $msg = "success: Thanh toán thành công!";
-    // $stmt = $con->prepare("INSERT INTO booking_order (user_id, room_id, check_in_date, check_out_date, arrival_time, departure_time, booking_status, transaction_id, transaction_amount, transaction_status, order_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    // $stmt->bind_param("iissssssdsd", $userId, $roomId, $startDate, $endDate, $arrivalTime, $departureTime, 'success' , $vnp_TransactionNo, $price, 'success', $order_id);
 
+// Lấy thông tin từ session
+$bookingDetails = $_SESSION['booking_details'];
+$userId = $_SESSION['user_id']; 
+$roomName = $bookingDetails['room_name'];
+$roomId = $bookingDetails['room_id'];
+$startDate = $bookingDetails['startDate'];
+$endDate = $bookingDetails['endDate'];
+$arrivalTime = $bookingDetails['time_arrival'];
+$departureTime = $bookingDetails['time_departure'];
+$roomsRequired =  $bookingDetails['roomsRequired'];
+$price = $bookingDetails['price'];
 
-    // if ($stmt->execute()) {
-    //     echo '<div class="notice">Thông tin đặt phòng đã được lưu.</div>';
-    // } else {
-    //     echo '<div class="notice">Error: ' . $stmt->error . '</div>';
-    // }
+global $con;
 
-    // // Đóng kết nối
-    // $stmt->close();
-} 
+if ($vnp_ResponseCode == "00") {
+    $bookingStatus = 'success';
+    $transactionStatus = 'success';
+
+    // Chuẩn bị câu lệnh SQL
+    $stmt = $con->prepare("INSERT INTO booking_order (user_id, room_id, check_in_date, check_out_date, arrival_time, departure_time, booking_status, transaction_id, transaction_amount, transaction_status, order_id, rooms_required) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    $stmt->bind_param("iissssssdssi", $userId, $roomId, $startDate, $endDate, $arrivalTime, $departureTime, $bookingStatus, $vnp_TransactionNo, $amount, $transactionStatus, $order_id, $roomsRequired);
+    // Thực thi câu lệnh và kiểm tra kết quả
+    if ($stmt->execute()) {
+        echo '<div class="notice">success:Thông tin đặt phòng đã được lưu thành công.</div>';
+    } else {
+        echo '<div class="notice">error: ' . $stmt->error . '</div>';
+    }
+
+    $stmt->close(); 
+
+    $stmt1 = $con->prepare("UPDATE room_status SET quantity = quantity - ? WHERE room_id = ? AND status = 'Có sẵn'");
+    $stmt1->bind_param("ii", $roomsRequired, $roomId);
+    $stmt1->execute();
+    $stmt1->close();
+
+    $stmt2 = $con->prepare("UPDATE room_status SET quantity = quantity + ? WHERE room_id = ? AND status = 'Đã đặt'");
+    $stmt2->bind_param("ii", $roomsRequired, $roomId);
+    $stmt2->execute();
+    $stmt2->close();
+}
 else $msg = "success: Thanh toán thất bại!";
+
 unset($_SESSION['booking_details']);
 $vnp_SecureHash = $_GET['vnp_SecureHash'];
 $inputData = array();

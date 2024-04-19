@@ -87,31 +87,20 @@ $(document).ready(function () {
         var searchValue = $(this).siblings('.input-view-control').val();
         window.location.href = '/admin/rooms/rm_room.php?room_id=' + searchValue;
     });
+    $('.user-btn-view-control, .user-btn-edit-control').on('click', function () {
+        var searchValue = $(this).siblings('.input-view-control').val();
+        window.location.href = '/admin/users/inf_users.php?user_id=' + searchValue;
+    });
 
     $('#btnAdd').on('click', function () {
         window.location.href = '/admin/rooms/add_room.php';
     });
-
-});
-$(document).ready(function() {
-    $('.input-file').on('change', function() {
-        // Lấy tên file từ đường dẫn file
-        var fileName = $(this).val().split('\\').pop();
-        
-        
-        var fileReturnId = $(this).data('return'); 
-        console.log(fileName);
-        $(fileReturnId).text(fileName);
+    $('#userSelect').on('change', function () {
+        if($('#userSelect option:selected').val())
+            window.location.href = '/admin/users/inf_users.php?user_id=' + $('#userSelect option:selected').val();
     });
 
-    $('.input-file-trigger').click(function(event) {
-        event.preventDefault();
-        $(this).siblings('.input-file').click(); 
-    });
 });
-
-
-
 
 
 

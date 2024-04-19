@@ -40,29 +40,19 @@
               </div>
               <div class="list-group">
                 <a href="#" class="list-group-item list-group-item-action unread">
-                  <p class="mb-1">chưa có thông tin</p>
+                  <p class="mb-1">Mai anh đã đặt phòng</p>
 
                   <div class="mb-1">
-                    <button type="button" class="btn btn-primary btn-sm">Accept invite</button>
-                    <button type="button" class="btn btn-outline-danger btn-sm">Decline</button>
+                    <button type="button" class="btn btn-primary btn-sm">Chấp nhận yêu cầu</button>
+                    <button type="button" class="btn btn-outline-danger btn-sm">Từ chối</button>
                   </div>
 
-                  <small>1 hour ago</small>
+                  <small>1 giờ trước</small>
                 </a>
 
                 <a href="#" class="list-group-item list-group-item-action">
-                  <p class="mb-1"><strong class="text-success">Goal completed</strong><br />1,000 new members today</p>
+                  <p class="mb-1 text-danger"><strong>A đã huỷ đặt phòng</strong></p>
                   <small>3 days ago</small>
-                </a>
-
-                <a href="#" class="list-group-item list-group-item-action">
-                  <p class="mb-1 text-danger"><strong>System error detected</strong></p>
-                  <small>3 days ago</small>
-                </a>
-
-                <a href="#" class="list-group-item list-group-item-action">
-                  <p class="mb-1">Your task <strong>Design Draft</strong> is due today.</p>
-                  <small>4 days ago</small>
                 </a>
               </div>
 
@@ -74,12 +64,12 @@
           <!-- Notifications -->
           <li class="nav-item dropdown">
             <a class="nav-link avatar-with-name" id="navbarDropdownMenuLink" data-toggle="dropdown" href="#">
-              <img src="/../images/<?php echo $userdata['profile_pic'];?>" class="d-inline-block align-top" alt="">
+              <img src="<?php if($userdata['profile_pic'] == "user_default.png"){ ?>/../images/user_default.png<?php } else{?>/admin/images/users/<?php echo $_SESSION['user_id'] . "/". $userdata['profile_pic']; }?>" class="d-inline-block align-top" alt="">
             </a>
             <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-              <a class="dropdown-item" href="#">My Profile</a>
-              <a class="dropdown-item" href="#">My Tasks</a>
-              <a class="dropdown-item" href="#">Settings</a>
+              <a class="dropdown-item" href="inf_users.php?user_id=<?php echo $_SESSION['user_id'];?>">Thông tin cá nhân</a>
+              <a class="dropdown-item" href="#">Việc cần làm</a>
+              <a class="dropdown-item" href="#">Cài đặt</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item text-warning" href="/../index.php">Về trang chủ</a>
               <a class="dropdown-item text-danger" href="/../logout.php">Thoát</a>
@@ -199,7 +189,7 @@
               </li>
 
               <li class="sidebar-nav-item">
-                <a href="/admin/users/inf_users.php" class="sidebar-nav-link">
+                <a href="/admin/users/inf_users.php?user_id=<?php echo $_SESSION['user_id']?>" class="sidebar-nav-link">
                   <span class="sidebar-nav-abbr">
                     If
                   </span>

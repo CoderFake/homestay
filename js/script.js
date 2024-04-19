@@ -90,21 +90,52 @@
 //     }
 // });
 
-$("html").addClass('js');
+// $("html").addClass('js');
+$(document).ready(function () {
+    $('.input-file').on('change', function () {
+        var file = this.files[0];
+        var fileType = file.type;
+        var fileSize = file.size;
 
-var fileInput  = $(".input-file"),  
-    button     = $(".input-file-trigger"),
-    the_return = $(".file-return");
-      
-button.on("keydown", function(event) {  
-    if ( event.keyCode == 13 || event.keyCode == 32 ) {  
-        fileInput.focus();  
-    }  
+        // Lấy id của thẻ img để cập nhật src
+        var imagePreview = $('#profile-pic');
+
+        // Kiểm tra loại tệp và kích thước
+        if (fileType === 'image/jpeg' || fileType === 'image/png' || fileType === 'image/webp') {
+            if (fileSize <= 2097152) { // 2MB
+                // Đọc và hiển thị tệp ảnh
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    imagePreview.attr('src', e.target.result);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                createToast('error', 'File quá lớn, vui lòng chọn file nhỏ hơn 2MB.');
+                $(this).val('');
+                imagePreview.attr('src', '/images/user_default.png'); // Trả lại ảnh mặc định nếu file quá lớn
+            }
+        } else {
+            createToast('error', 'Chỉ chấp nhận file ảnh định dạng JPG, PNG hoặc WebP.')
+            $(this).val('');
+            imagePreview.attr('src', '/images/user_default.png'); // Trả lại ảnh mặc định nếu định dạng không đúng
+        }
+    });
+
+    $('.input-file-trigger').click(function (event) {
+        event.preventDefault();
+        $(this).siblings('.input-file').click();
+    });
 });
-button.on("click", function(event) {
-    fileInput.focus();
-    return false;
-});  
-fileInput.on("change", function(event) {  
-    the_return.html($(this).val());  
-});  
+
+
+$(document).ready(function () {
+    $("#old-password, #new-password, #acpt-password").on("input", function () {
+        if ($("#new-password").val() === $("#acpt-password").val()) {
+            $("#acpt-password").removeClass("is-invalid");
+            $("#acpt-password").addClass("is-valid");
+        } else {
+            $("#acpt-password").removeClass("is-valid");
+            $("#acpt-password").addClass("is-invalid");
+        }
+    });
+});

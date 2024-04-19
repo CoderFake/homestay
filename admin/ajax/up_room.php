@@ -44,7 +44,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $stmt->close();
 
     // Thêm các tiện ích mới
-    // Thêm các tiện ích mới
     $stmt = $con->prepare("INSERT INTO room_facilities (room_id, facility_id) VALUES (?, ?)");
     foreach ($facilities as $facility_id) {
         if (!$stmt) {
@@ -58,11 +57,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     resetAutoIncrement('room_facilities');
 
-    $stmt = $con->prepare("SELECT COUNT(*) as booked_rooms FROM booking_order WHERE room_id = ? AND booking_status = 'success'");
+    $stmt = $con->prepare("SELECT SUM(quantity) AS booked_rooms FROM room_status WHERE room_id = ? AND status = 'Đã đặt'");
     $stmt->bind_param("i", $room_id);
+
+    // Thực thi câu lệnh
     $stmt->execute();
     $result = $stmt->get_result();
     $booked_rooms = 0;
+
+    // Lấy kết quả
     if ($row = $result->fetch_assoc()) {
         $booked_rooms = $row['booked_rooms'];
     }

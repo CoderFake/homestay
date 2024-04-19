@@ -5,7 +5,6 @@ adminLogin();
 require_once '../inc/db_config.php';
 // Kiểm tra xem yêu cầu có phải là AJAX không và có phải phương thức POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
     if (isset($_POST['action'])) {
         switch ($_POST['action']) {
             case 'update_role':
@@ -25,6 +24,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         echo json_encode(['count' => $count]);
         exit;
     }
+    
+
 }
 
 ?>

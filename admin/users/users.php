@@ -119,10 +119,11 @@ $userdata = User();
                           <td>
                             <input class="input-view-control d-none"
                               value="<?php echo htmlspecialchars($user['user_id']); ?>" />
-                            <?php if ((isset($_SESSION['staff_id']) && $_SESSION['staff_id'] == $user['user_id']) || (isset($_SESSION['admin_id']) && $_SESSION['admin_id'] == $user['user_id'])) { ?>
-                              <button class="btn btn-sm btn-primary user-btn-edit-control">Sửa</button>
-                            <?php } ?>
-                            <button class="btn btn-sm btn-info user-btn-view-control">Xem</button>
+                            <?php if ((isset($_SESSION['staff_id']) && $_SESSION['staff_id'] == $user['user_id']) || (isset($_SESSION['admin_id']) && $_SESSION['admin_id'] == $user['user_id'])):?>
+                              <button class="btn btn-sm btn-primary user-btn-edit-control">Xem & Sửa</button>
+                            <?php else :?>
+                              <button class="btn btn-sm btn-info user-btn-view-control">Xem</button>
+                            <?php endif;?>
                           </td>
                         </tr>
                       <?php endforeach; ?>

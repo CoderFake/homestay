@@ -1,0 +1,91 @@
+
+.bill-container .card-footer-btn {
+    display: flex;
+    align-items: center;
+    border-top-left-radius: 0!important;
+    border-top-right-radius: 0!important;
+}
+.bill-container .text-uppercase-bold-sm {
+    text-transform: uppercase!important;
+    font-weight: 500!important;
+    letter-spacing: 2px!important;
+    font-size: .85rem!important;
+}
+.bill-container .hover-lift-light {
+    transition: box-shadow .25s ease,transform .25s ease,color .25s ease,background-color .15s ease-in;
+}
+.bill-container .justify-content-center {
+    justify-content: center!important;
+}
+.bill-container .btn-group-lg>.btn, .btn-lg {
+    padding: 0.8rem 1.85rem;
+    font-size: 1.1rem;
+    border-radius: 0.3rem;
+}
+.bill-container .btn-dark {
+    color: #fff;
+    background-color: #1e2e50;
+    border-color: #1e2e50;
+}
+
+.bill-container .card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(30,46,80,.09);
+    border-radius: 0.25rem;
+    box-shadow: 0 20px 27px 0 rgb(0 0 0 / 5%);
+}
+
+.bill-container .p-5 {
+    padding: 3rem!important;
+}
+.bill-container .card-body {
+    flex: 1 1 auto;
+    padding: 1.5rem 1.5rem;
+}
+
+.bill-container tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+
+.bill-container .table td, .table th {
+    border-bottom: 0;
+    border-top: 1px solid #edf2f9;
+}
+.bill-container .table>:not(caption)>*>* {
+    padding: 1rem 1rem;
+    background-color: var(--bs-table-bg);
+    border-bottom-width: 1px;
+    box-shadow: inset 0 0 0 9999px var(--bs-table-accent-bg);
+}
+.bill-container .px-0 {
+    padding-right: 0!important;
+    padding-left: 0!important;
+}
+.bill-container .table thead th, tbody td, tbody th {
+    vertical-align: middle;
+}
+.bill-container tbody, td, tfoot, th, thead, tr {
+    border-color: inherit;
+    border-style: solid;
+    border-width: 0;
+}
+
+.bill-container .mt-5 {
+    margin-top: 3rem!important;
+}
+
+.bill-container .icon-circle[class*=text-] [fill]:not([fill=none]), .icon-circle[class*=text-] svg:not([fill=none]), .svg-icon[class*=text-] [fill]:not([fill=none]), .svg-icon[class*=text-] svg:not([fill=none]) {
+    fill: currentColor!important;
+}
+.bill-container .svg-icon>svg {
+    width: 1.45rem;
+    height: 1.45rem;
+}

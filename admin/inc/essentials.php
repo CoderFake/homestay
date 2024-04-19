@@ -242,8 +242,6 @@ function User() {
         } 
     } 
     
-    // Đóng kết nối CSDL
-    $con->close();
     return $userData;
   }
 

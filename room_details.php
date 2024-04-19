@@ -390,13 +390,19 @@ if (isset($_GET['room_id'])) {
                 $(this).val('');
             });
         });
+        var roomDetails = {
+            adult_capacity: <?php echo $roomDetails['adult_capacity']; ?>,
+            children_capacity: <?php echo $roomDetails['children_capacity']; ?>,
+            price: <?php echo $roomDetails['price']; ?>,
+            avai: <?php echo $roomStatus['quantity']; ?>
+        };
         $(document).ready(function () {
             function calculateDays() {
                 var dateRange = $('#date-range').val();
                 var timeArrival = $('#time-arrival option:selected').val();
                 var timeDeparture = $('#time-departure option:selected').val();
 
-                if (!dateRange.trim()) return 1; 
+                if (!dateRange.trim()) return 1;
 
                 var dates = dateRange.split('-');
                 var startDate = $.trim(dates[0]);
@@ -410,12 +416,7 @@ if (isset($_GET['room_id'])) {
 
                 return days;
             }
-            var roomDetails = {
-                adult_capacity: <?php echo $roomDetails['adult_capacity']; ?>,
-                children_capacity: <?php echo $roomDetails['children_capacity']; ?>,
-                price:  parseInt(<?php echo $roomDetails['price']; ?>),
-                avai: <?php echo $roomStatus['quantity']; ?>
-            };
+
             function updateRoomCount(days) {
                 var adults = parseInt($('.number-picker-container.adult .number-picker-number').text());
                 var children = parseInt($('.number-picker-container.child .number-picker-number').text());
@@ -432,12 +433,14 @@ if (isset($_GET['room_id'])) {
 
                 $('#rooms-price').text(formattedCost);
             }
-            $('#date-range').on('change', function() {
+
+            // Sử dụng event delegation cho sự kiện change
+            $(document).on('click', '.applyBtn', function () {
                 var days = calculateDays();
                 updateRoomCount(days);
             });
 
-            $('.number-picker-btn, .applyBtn').on('click', function () {
+            $('.number-picker-btn').on('click', function () {
                 var numberPicker = $(this).siblings('.number-picker-number');
                 var currentValue = parseInt(numberPicker.text());
                 if ($(this).hasClass('btn-plus')) {
@@ -445,13 +448,12 @@ if (isset($_GET['room_id'])) {
                 } else if ($(this).hasClass('btn-minus') && currentValue > 0) {
                     numberPicker.text(currentValue - 1);
                 }
-                days = calculateDays();
+                var days = calculateDays();
                 updateRoomCount(days);
-                $(this).parent().find('img').off('click');
             });
 
-            // Gọi hàm updateRoomCount một lần khi tải trang để thiết lập giá trị ban đầu
-            updateRoomCount(1);
+            // Khởi tạo ban đầu
+            updateRoomCount(calculateDays());
         });
 
     </script>
@@ -464,6 +466,7 @@ if (isset($_GET['room_id'])) {
                 var roomName = <?php echo json_encode($roomDetails['name']); ?>;
                 var dateRange = $('#date-range').val().trim().replace(/ /g, '');
                 var dates = dateRange.split('-');
+                var roomsRequired =  $('#rooms-required').text();
                 var startDate = dates[0].split('/').reverse().join('-');
                 var endDate = dates[1].split('/').reverse().join('-');
                 var timeArrival = $('#time-arrival option:selected').val().trim().replace(/ /g, '');
@@ -487,6 +490,7 @@ if (isset($_GET['room_id'])) {
                         endDate: endDate,
                         time_arrival: timeArrival,
                         time_departure: timeDeparture,
+                        roomsRequired : roomsRequired,
                         price: price,
                         payment_method: paymentMethod,
                         redirect: redirectUrl

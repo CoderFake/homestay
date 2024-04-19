@@ -12,7 +12,7 @@ $queryTotalRooms = "SELECT SUM(quantity) AS total_rooms FROM room_status";
 $resultTotalRooms = $con->query($queryTotalRooms);
 $totalRooms = $resultTotalRooms->fetch_assoc()['total_rooms'];
 $queryBookedRooms = "SELECT SUM(quantity) AS booked_rooms FROM room_status WHERE status='Đã đặt'";
-$resultBookedRooms = $con->query($queryBookedRooms); 
+$resultBookedRooms = $con->query($queryBookedRooms);
 $bookedRooms = $resultBookedRooms->fetch_assoc()['booked_rooms'];
 $percentage = $totalRooms > 0 ? ($bookedRooms / $totalRooms) * 100 : 0;
 
@@ -20,33 +20,33 @@ $percentage = $totalRooms > 0 ? ($bookedRooms / $totalRooms) * 100 : 0;
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['updateConfig'])) {
   $logoImageName = uploadImageAndReturnPath('logo_image');
   if ($logoImageName) {
-      $configData['logo_image'] = "images/" . $logoImageName; 
+    $configData['logo_image'] = "images/" . $logoImageName;
   }
   $headerImageName = uploadImageAndReturnPath('header_image');
   if ($headerImageName) {
-      $configData['header_image'] = "images/" . $headerImageName; 
+    $configData['header_image'] = "images/" . $headerImageName;
   }
   $aboutImageName = uploadImageAndReturnPath('about_image');
   if ($aboutImageName) {
-      $configData['about_image'] = "images/" . $aboutImageName; 
+    $configData['about_image'] = "images/" . $aboutImageName;
   }
   $newData = [
-      "homeStayName" => $_POST['hs_name'] ?? '',
-      "address" => $_POST['area'] ?? '', 
-      "phone" => $_POST['phone'] ?? '',
-      "email" => $_POST['email'] ?? '',
-      "facebookLink" => $_POST['facebook'] ?? '',
-      "instagramLink" => $_POST['instagram'] ?? '',
-      "footer" => $_POST['footer'] ?? '',
-      "description" => $_POST['desc'] ?? '',
-      "map" => $_POST['map'] ?? '',
-      "logo_image" => $logoImageName,
-      "header_image" => $headerImageName,
-      "about_image" => $aboutImageName
-      
+    "homeStayName" => $_POST['hs_name'] ?? '',
+    "address" => $_POST['area'] ?? '',
+    "phone" => $_POST['phone'] ?? '',
+    "email" => $_POST['email'] ?? '',
+    "facebookLink" => $_POST['facebook'] ?? '',
+    "instagramLink" => $_POST['instagram'] ?? '',
+    "footer" => $_POST['footer'] ?? '',
+    "description" => $_POST['desc'] ?? '',
+    "map" => $_POST['map'] ?? '',
+    "logo_image" => $logoImageName,
+    "header_image" => $headerImageName,
+    "about_image" => $aboutImageName
+
   ];
-  $newData = array_filter($newData, function($value) {
-      return $value !== null;
+  $newData = array_filter($newData, function ($value) {
+    return $value !== null;
   });
 
   updateConfig($newData);
@@ -181,41 +181,49 @@ $userdata = User();
                   <div class="form collapse show" id="card0">
                     <div class="form-group m-3">
                       <label class="form-label" for="hs_name">Tên website</label>
-                      <input type="text" class="form-control mb-3" value ="<?php echo  $data_homestay['homeStayName'];?>" name="hs_name" id="hs_name">
+                      <input type="text" class="form-control mb-3" value="<?php echo $data_homestay['homeStayName']; ?>"
+                        name="hs_name" id="hs_name">
                     </div>
                     <div class="form-group m-3">
                       <label class="form-label" for="area">Khu vực</label>
-                      <input type="text" class="form-control mb-3" value ="<?php echo  $data_homestay['address'];?>" name="area" id="area">
+                      <input type="text" class="form-control mb-3" value="<?php echo $data_homestay['address']; ?>"
+                        name="area" id="area">
                     </div>
                     <div class="row">
                       <div class="col-lg-6">
                         <div class="form-group m-3">
                           <label class="form-label" for="phone">Số điện thoại</label>
-                          <input type="text" class="form-control w-100" value ="<?php echo  $data_homestay['phone'];?>" name="phone" id="phone">
+                          <input type="text" class="form-control w-100" value="<?php echo $data_homestay['phone']; ?>"
+                            name="phone" id="phone">
                         </div>
                       </div>
                       <div class="col-lg-6">
                         <div class="form-group m-3">
                           <label class="form-label" for="email">Email</label>
-                          <input type="text" class="form-control w-100" value ="<?php echo  $data_homestay['email'];?>" name="email" id="email">
+                          <input type="text" class="form-control w-100" value="<?php echo $data_homestay['email']; ?>"
+                            name="email" id="email">
                         </div>
                       </div>
                     </div>
                     <div class="form-group m-3">
                       <label class="form-label" for="facebook">Link Facebook</label>
-                      <input type="text" class="form-control mb-3" value ="<?php echo  $data_homestay['facebookLink'];?>" name="facebook" id="facebook">
+                      <input type="text" class="form-control mb-3" value="<?php echo $data_homestay['facebookLink']; ?>"
+                        name="facebook" id="facebook">
                     </div>
                     <div class="form-group m-3">
                       <label class="form-label" for="instagram">Link Instagram</label>
-                      <input type="text" class="form-control mb-3" value ="<?php echo  $data_homestay['instagramLink'];?>" name="instagram" id="instagram">
+                      <input type="text" class="form-control mb-3"
+                        value="<?php echo $data_homestay['instagramLink']; ?>" name="instagram" id="instagram">
                     </div>
                     <div class="form-group m-3">
                       <label class="form-label" for="map">Link vị trí bản đồ</label>
-                      <input type="text" class="form-control mb-3" value ="<?php echo  $data_homestay['map'];?>" name="map" id="map">
+                      <input type="text" class="form-control mb-3" value="<?php echo $data_homestay['map']; ?>"
+                        name="map" id="map">
                     </div>
                     <div class="form-group m-3">
                       <label class="form-label" for="footer">Tên footer</label>
-                      <input type="text" class="form-control mb-3" value ="<?php echo  $data_homestay['footer'];?>"  name="footer" id="footer">
+                      <input type="text" class="form-control mb-3" value="<?php echo $data_homestay['footer']; ?>"
+                        name="footer" id="footer">
                     </div>
                   </div>
                 </div>
@@ -239,7 +247,8 @@ $userdata = User();
                       </div>
                       <div class="form collapse show" id="card1">
                         <div class="form-group m-4">
-                        <textarea class="form-control p-10 w-60" name="desc" id="desc" cols="30" rows="12"><?php echo htmlspecialchars($data_homestay['description']); ?></textarea>
+                          <textarea class="form-control p-10 w-60" name="desc" id="desc" cols="30"
+                            rows="12"><?php echo htmlspecialchars($data_homestay['description']); ?></textarea>
                         </div>
                       </div>
                     </div>
@@ -297,7 +306,8 @@ $userdata = User();
                   </div>
                   <div class="col-lg-12 mt-5">
                     <div class="form-group d-flex justify-content-center align-items-center">
-                      <button type="submit" name="updateConfig" id="submitbutton" class="btn btn-success pr-5 pl-5">Cập nhật</button>
+                      <button type="submit" name="updateConfig" id="submitbutton" class="btn btn-success pr-5 pl-5">Cập
+                        nhật</button>
                     </div>
                   </div>
                 </div>
@@ -310,6 +320,22 @@ $userdata = User();
   </div>
   <?php require ("inc/footer.php") ?>
   <script>
+    $(document).ready(function() {
+        $('.input-file').on('change', function() {
+            // Lấy tên file từ đường dẫn file
+            var fileName = $(this).val().split('\\').pop();
+            
+            
+            var fileReturnId = $(this).data('return'); 
+            console.log(fileName);
+            $(fileReturnId).text(fileName);
+        });
+
+        $('.input-file-trigger').click(function(event) {
+            event.preventDefault();
+            $(this).siblings('.input-file').click(); 
+        });
+    });
     $(document).ready(function () {
       function fetchUsersLoggedIn() {
         $.ajax({

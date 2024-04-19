@@ -1,3 +1,12 @@
+:root {
+    --main-color: #d3ad7f;
+    --black: #13131a;
+    --bg: #fff;
+    --border: .1rem solid rgba(255, 255, 255, .3);
+    --text: #512B1A;
+    --sub-bg: #e1dfdf;
+    --text2: #f46e39;
+}
 * {
     margin: 0;
     padding: 0;
@@ -563,6 +572,52 @@ input[type=range]:focus::-webkit-slider-runnable-track {
     display: none;
 }
 
+.profile-container {
+    margin-top: 20px;
+    margin-bottom: 80px;
+}
+.profile-container .pic-container{
+    display:flex;
+    justify-content: center;
+    align-items: start;
+    overflow:hidden;
+}
+.profile-container .picture-image{
+    display:flex;
+    justify-content: center;
+    overflow: hidden;
+}
+
+.profile-container .picture-image img {
+    width: 250px;   
+    height: 250px;  
+    border-radius: 50%;  
+    object-fit: cover;   
+    border: 2px solid #fff; 
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);  
+}
+
+
+.profile-container .username {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    color: var(--text2);
+}
+
+#profile-group {
+    margin-bottom: 20px;
+}
+
+.profile-container .btn-primary {
+    margin-top: 20px;
+}
+.profile-container .btn-info{
+    background-color:#f46e39 !important;
+    border: none !important;
+    height: 45px !important;
+}
+
+
 .swiper-container {
     overflow: hidden;
     margin: 30px auto;
@@ -809,7 +864,9 @@ input[readonly] {
 textarea[disabled] {
     background-color: transparent !important; 
 }
-
+textarea {
+    background-color: transparent !important; 
+}
 
 @media screen and (max-width: 768px) {
     .range-wrap span {

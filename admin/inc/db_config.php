@@ -281,7 +281,7 @@ function uploadRoomImages($room_id) {
         $file_ext = strtolower(pathinfo($name, PATHINFO_EXTENSION));
 
         // Kiểm tra định dạng và kích thước file
-        if (in_array($file_ext, $valid_extensions) && $_FILES['roomImages']['size'][$key] <= 2000000) {
+        if (in_array($file_ext, $valid_extensions) && $_FILES['roomImages']['size'][$key] <= 4000000) {
             $filename = $count++ . '.' . $file_ext; // Tên file mới
             $targetFile = $uploadDir . $filename; // Đường dẫn file đích
 
@@ -291,7 +291,7 @@ function uploadRoomImages($room_id) {
                 exit();
             }
         } else {
-            echo json_encode(['status' => 'error', 'message' => "Ảnh không hợp lệ hoặc kích thước lớn hơn 2MB!S"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+            echo json_encode(['status' => 'error', 'message' => "Ảnh không hợp lệ hoặc kích thước lớn hơn 4MB!S"], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
             exit();
         }
     }
