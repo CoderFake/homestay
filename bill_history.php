@@ -2,7 +2,7 @@
 session_start();
 require_once ('admin/inc/essentials.php');
 require_once ('admin/inc/db_config.php');
-adminLogin();
+userLogin();
 $data_homestay = readConfig();
 $users = selectOrderedUsers();
 
@@ -11,6 +11,7 @@ $users = selectOrderedUsers();
 $query = "
     SELECT 
         booking_order.order_id,
+        booking_order.booking_id,
         rooms.name AS room_name,
         booking_order.check_in_date,
         booking_order.arrival_time,
@@ -93,6 +94,7 @@ $userdata = User();
                                             <?php endif; ?>
                                         </td>
                                         <td>
+                                        <input type="hidden" name="bookingId" value="<?php echo htmlspecialchars($booking['booking_id']);?>">
                                             <button class="btn btn-sm btn-info booking-btn-view-control">Xem</button>
                                         </td>
                                     </tr>
@@ -110,6 +112,14 @@ $userdata = User();
         </div>
     </div>
 <?php require ('inc/footer.php'); ?>
+    <script>
+        $(document).ready(function () {
+            $('.booking-btn-view-control').on('click', function() {
+                var searchValue = $(this).closest('td').find('input[type="hidden"]').val();
+                window.location.href = '/bill.php?booking_id=' + searchValue;
+            });
+        });
+    </script>
 </body>
 
 </html>

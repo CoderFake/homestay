@@ -48,6 +48,16 @@ function adminLogin(){
 //Hàm session_regenerate_id(true) được gọi để tạo lại ID phiên làm việc của người dùng. 
 //Điều này giúp tăng cường bảo mật cho phiên làm việc của người dùng, do đó, tăng khả năng chống lại các cuộc tấn công từ người dùng xấu.
 }
+function userLogin() {
+    // Kiểm tra xem có session 'user_id' đã được thiết lập hay không
+    if (!isset($_SESSION['user_id'])) {
+        // Nếu không có session 'user_id', người dùng không được xem là đã đăng nhập
+        // Chuyển hướng người dùng đến trang đăng nhập
+        redirect('acc.php');
+        exit(); // Dừng mọi code phía sau từ việc thực thi
+    }
+    // Nếu có session 'user_id', không làm gì cả và cho phép script tiếp tục
+}
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
